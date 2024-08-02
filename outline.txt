@@ -1,0 +1,12 @@
+
+
+-Country page
+ -Trip Date (and city if applicable)
+  -Introduction of city/country
+  -Div types
+   -Full length text
+   -Text left, photo right
+   -Text right, photo left
+   -Full length photo
+   -Additional/Misc photos?
+  -Travel experience organized by chronology

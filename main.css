@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Oleo+Script&family=Oswald:wght@400;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Oswald', Arial;
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+    color: #4D4D4D;
+}
+
+img {
+    width: 100%;
+}
+
+.logo {
+    height: 6.6em;
+    width: 6.6em;
+    padding: 1.5em;
+    font-size: 10px;
+}
+
+
+
+/* Navigation Bar */
+.nav-container {
+    background: #E9ECEA;
+    height: 6em;
+    width: 100%;
+    display: flex;
+    z-index: 5;
+}
+header {
+    display: flex;
+    color: #4D4D4D;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    font-size: 3rem;
+}
+nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+nav li {
+    float: left;
+    padding: .2em;
+    list-style: none;
+}
+
+#nav-left {
+    float: left;
+    padding: 0;
+}
+
+#nav-right {
+    position: absolute;
+    right: 0;
+    margin-right: .5em;
+    padding: 0;
+}
+nav a:hover {
+    color:#E9ECEA;
+    background:#4D4D4D;
+}
+
+
+
+/* Homepage */
+.hero {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero-background {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    z-index: -1;
+    height: 100vh;
+    width: 100%;
+}
+.hero-background::before {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    backdrop-filter: blur(8px);
+}
+.hero-background img {
+    object-fit: cover;
+    height: 100%
+}
+.hero-content {
+    color: #ffffff;
+    font-weight: 600;
+    text-align: center;
+    background-color: rgba(0,0,0,0.6);
+    padding: 0px 35px;
+}
+.hero-content h1 {
+    margin: 0;
+    white-space: nowrap;
+}
+#intro1 {
+    font-size: 7.5rem;
+}
+#intro2 {
+    font-family: 'Oleo Script', Arial;
+    font-weight: 400;
+    font-size: 2.25rem;
+    position: relative;
+    top: -20px;
+}
+#intro3 {
+    font-size: 3.75rem;
+    position: relative;
+    top: -25px;
+}
+
+
+
+/* About Me */
+.profile {
+    padding: 2em 1.5em;
+    display: flex;
+    flex-direction: row;
+}
+#profile-intro {
+    width: 60%;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 4rem;
+}
+#profile-intro p {
+    margin: .5em 0 .75em 0;
+}
+#profile-desc {
+    text-align: justify;
+    padding: 0 2em 0 4em;
+    font-size: 1.5rem;
+}
+#profile-image {
+    width: 40%;
+    padding: 0 .5em;
+    text-align: center;
+}
+#profile-image img {
+    width: 70%;
+    border-radius: 10%;
+}
+
+
+/* Destinations */
+.destination {
+    margin: 2em;
+    text-transform: uppercase;
+}
+.destination p {
+    text-align: center;
+    font-size: 2rem;
+}
+#chartdiv {
+    margin-left: auto;
+    margin-right: auto;
+}
+.destination-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.destination-list a {
+    width: 20%;
+    max-width: 25%;
+    flex-grow: 1;
+    padding: 2em 1em 2em;
+    margin: 2em 1em 0em;
+    background-color: #c4e1ff;
+    font-size: 1.75rem;
+    text-align: center;
+}
+.destination-list a:hover {
+    color:#E9ECEA;
+    background-color: #659dbd;
+}
+
+
+
+/* Country/City Page */
+.dest-container {
+    margin: 0 8em;
+    
+}
+.dest-heading {
+    width: 100%;
+    padding: 1em 0 0;   
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+.dest-intro {
+    padding: 0 6em 0.5em;
+    font-size: 1.75rem;
+    text-align: justify;
+}
+.dest-text {
+    font-size: 1.5rem;
+}
+.dest-photo {
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+    margin: auto;
+}
+.dest-combo {
+    font-size: 1.5rem;
+    display: flex;
+}
+.dest-combo img {
+    width: 25%;
+    padding: 20px;
+}
+.dest-combo p {
+    padding: 0 15px;
+}
+
+
+
+/* Footer */
+.footer {
+    margin: 2em;
+    padding: 1em;
+}
+
+
+/* RESIZING FOR HOMEPAGE
+@media only screen and (max-width: 1075px) {
+    #nav-left, #nav-right {
+        font-size: 2.25rem;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    #nav-left {
+        font-size: 2.25rem;
+    }
+    #nav-right {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    #nav-left, #nav-right {
+        font-size: 1.875rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .hero-content {
+        width: 100%;
+        padding: 0;
+    }
+    #intro1 {
+        font-size: 5.5rem;
+    }
+    #intro2 {
+        font-size: 1.65rem;
+    }
+    #intro3 {
+        font-size: 2.75rem;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    #nav-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 1rem;
+    }
+    #nav-left li {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    #intro1 {
+        font-size: 4.4rem;
+    }
+    #intro2 {
+        font-size: 1.32rem;
+    }
+    #intro3 {
+        font-size: 2.2rem;
+    }
+}
+
+p {
+    margin: 3em 0 0 3em;
+    font-size: 3.5rem;
+    text-transform: uppercase;
+}
+*/
+
+
+
+/* RESIZING FOR ABOUT ME
+@media only screen and (min-width: 850px) {
+    .profile {
+        padding: 2em 4em;
+    }
+    .profile-intro {
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding-top: 1em;
+    }
+    .profile-intro img {
+        align-content: right;
+        width: 40%;
+    }
+    .profile-desc {
+        padding-top: 1.5em;
+    }
+}
+
+@media only screen and (min-width: 1050px) {
+    .profile-desc {
+        padding: 3em 5em;
+    }
+}
+*/
