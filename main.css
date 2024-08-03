@@ -198,6 +198,7 @@ nav a:hover {
 /* Country/City Page */
 .dest-container {
     margin: 0 8em;
+    text-align: justify;
     
 }
 .dest-heading {
@@ -210,13 +211,13 @@ nav a:hover {
 .dest-intro {
     padding: 0 6em 0.5em;
     font-size: 1.75rem;
-    text-align: justify;
 }
 .dest-text {
     font-size: 1.5rem;
+    padding: 0 15px;
 }
 .dest-photo {
-    width: 50%;
+    width: 50vw;
     padding: 10px;
     text-align: center;
     margin: auto;
@@ -226,11 +227,12 @@ nav a:hover {
     display: flex;
 }
 .dest-combo img {
-    width: 25%;
+    height: 60vh;
     padding: 20px;
 }
 .dest-combo p {
     padding: 0 15px;
+    margin: auto;
 }
 
 
