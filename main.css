@@ -227,8 +227,10 @@ nav a:hover {
     display: flex;
 }
 .dest-combo img {
-    height: 60vh;
+    max-height: 400px;
     padding: 20px;
+    object-fit: cover;
+    margin: auto;
 }
 .dest-combo p {
     padding: 0 15px;
