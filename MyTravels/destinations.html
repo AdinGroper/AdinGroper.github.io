@@ -42,13 +42,15 @@
             <a href="/MyTravels/andorra.html"><div>Andorra</div></a>
             <a href="/MyTravels/austria.html"><div>Austria</div></a>
             <!-- <a href=""><div>China</div></a> -->
-            <a href="/MyTravels/czechrepublic.html"><div>Czech Republic</div></a>
+            <!-- <a href=""><div>Colombia</div></a> -->
+            <a href="/MyTravels/czechia.html"><div>Czechia </div></a>
             <a href="/MyTravels/france.html"><div>France</div></a>
             <!-- <a href=""><div>Germany</div></a> -->
             <a href="/MyTravels/hungary.html"><div>Hungary</div></a>
             <!-- <a href=""><div>Ireland</div></a> -->
             <!-- <a href=""><div>Israel</div></a> -->
             <!-- <a href=""><div>Italy</div></a> -->
+            <!-- <a href=""><div>Japan</div></a> -->
             <a href="/MyTravels/luxembourg.html"><div>Luxembourg</div></a>
             <a href="/MyTravels/malta.html"><div>Malta</div></a>
             <!-- <a href=""><div>Morocco</div></a> -->
@@ -69,12 +71,12 @@
  <script>
     var visitedplaces_config = {
         "map": "world",
-        "projection": "geoOrthographic",
+        "projection": "geoOrthographic", //"geoNaturalEarth1", 
         "theme": "dark-green",
         "water": 1,
         "graticule": 0,
         "names": 1,
-        "duration": 2000,
+        "duration": 1600,
         "slider": 0,
         "autoplay": 1,
         "autozoom": "none",
@@ -101,6 +103,22 @@
               "rotationX": 100.6,
               "rotationY": -44.4,
               "zoomLevel": 1.6
+            }
+          },
+          { 
+            "colors": {},
+            "places": [
+              "CO"
+            ],
+            "text": "South America",
+            "position": {
+              "geoPoint": {
+                "longitude": -65.9,
+                "latitude": -20.1
+              },
+              "rotationX": 65.9,
+              "rotationY": 20.1,
+              "zoomLevel": 1.5
             }
           },
           {
@@ -152,7 +170,8 @@
             "places": [
               "IL",
               "CN",
-              "SG"
+              "SG",
+              "JP"
             ],
             "text": "Asia",
             "position": {
@@ -164,7 +183,24 @@
               "rotationX": -83.8,
               "rotationY": -33.3
             }
-          }
+          },
+          /*{
+            "colors": {},
+            "places": [
+              "AU",
+              "FJ"
+            ],
+            "text": "Oceania",
+            "position": {
+              "zoomLevel": 1.9,
+              "geoPoint": {
+                "longitude": 134.3,
+                "latitude": -25.7
+              },
+              "rotationX": -134.3,
+              "rotationY": 25.7
+            }
+          } */
         ],
         "home": "US"
       };
