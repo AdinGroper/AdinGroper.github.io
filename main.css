@@ -17,30 +17,35 @@ img {
     width: 100%;
 }
 
-.logo {
-    height: 6.6em;
-    width: 6.6em;
-    padding: 1.5em;
-    font-size: 10px;
-}
 
 
 
-/* Navigation Bar */
-.nav-container {
-    background: #E9ECEA;
-    height: 6em;
-    width: 100%;
-    display: flex;
-    z-index: 5;
-}
+
+/* NAVIGATION BAR */
+/* Mobile */
 header {
     display: flex;
     color: #4D4D4D;
+    width: 100%;
+    font-size: 1rem;
     text-align: center;
     text-decoration: none;
+    align-items: center;
+}
+
+.logo {
+    height: 2.5em;
+    width: 2.5em;
+    padding: 0.8em;
+    font-size: 10px;
+}
+
+.nav-container {
+    background: #E9ECEA;
+    height: 2.5em;
     width: 100%;
-    font-size: 3rem;
+    display: flex;
+    z-index: 5;
 }
 nav {
     flex: 1;
@@ -69,11 +74,40 @@ nav a:hover {
     background:#4D4D4D;
 }
 
+/* Mobile Landscape */
+@media (min-width: 480px) {
+
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    header {
+        font-size: 3rem;
+    }
+    .logo {
+        height: 6.6em;
+        width: 6.6em;
+        padding: 1.5em;
+        font-size: 10px;
+    }
+    .nav-container {
+        height: 6em;
+    }
+}
 
 
-/* Homepage */
+
+
+
+/* HOMEPAGE */
+/* Mobile */
 .hero {
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -85,15 +119,15 @@ nav a:hover {
     background-size: cover;
     position: absolute;
     z-index: -1;
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
 }
 .hero-background::before {
     content: "";
     position: absolute;
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(6px);
 }
 .hero-background img {
     object-fit: cover;
@@ -103,43 +137,122 @@ nav a:hover {
     color: #ffffff;
     font-weight: 600;
     text-align: center;
-    background-color: rgba(0,0,0,0.6);
-    padding: 0px 35px;
+    text-shadow: 2px 2px 4px black;
+    /*background-color: rgba(0,0,0,0.6); */
+    margin: 0px 25px;
 }
 .hero-content h1 {
     margin: 0;
     white-space: nowrap;
 }
 #intro1 {
-    font-size: 7.5rem;
+    font-size: 5rem;
 }
 #intro2 {
     font-family: 'Oleo Script', Arial;
     font-weight: 400;
     font-size: 2.25rem;
     position: relative;
-    top: -20px;
+    top: -15px;
 }
 #intro3 {
-    font-size: 3.75rem;
+    font-size: 2rem;
     position: relative;
-    top: -25px;
+    top: -20px;
+}
+
+/* Mobile Landscape */
+@media (min-width: 480px) {
+
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    #intro1 {
+        font-size: min(calc(2.75rem + 8vw), 10rem);
+    }
+    #intro2 {
+        font-size: min(calc(2rem + 2vw), 4rem);
+        top: -20px;
+    }
+    #intro3 {
+        font-size: min(calc(2.25rem + 3vw), 5rem);
+        top: -25px;
+    }
 }
 
 
 
-/* About Me */
+
+
+/* ABOUT ME */
+/* Mobile */
 .profile {
     padding: 2em 1.5em;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 #profile-intro {
-    width: 60%;
+    width: 100%;
     text-transform: uppercase;
     text-align: center;
-    font-size: 5rem;
 }
+#profile-intro h1 {
+    font-size: 4rem;
+    font-weight: normal;
+    margin: 0.25em 0 0;
+}
+#profile-intro h2 {
+    font-size: 2rem;
+    font-weight: normal;
+}
+#profile-image {
+    width: 100%;
+    margin: 1em 0;
+    text-align: center;
+}
+#profile-image img {
+    width: 85%;
+    border-radius: 25%;
+    background-color: #E9ECEA;
+    /*border: 2px solid;
+    border-color:#4D4D4D; */
+    box-shadow: 1px 1px 2px black;
+}
+#profile-desc {
+    text-align: justify;
+    padding: 0 1.25em;
+    font-size: 1.25rem;
+}
+
+/* Mobile Landscape */
+@media (min-width: 480px) {
+
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .profile {
+    padding: 2em 1.5em;
+    flex-direction: row;
+    }
+    #profile-intro {
+        width: 60%;
+    }
+    #profile-intro h1 {
+        font-size: 5rem;
+        font-weight: normal;
+    }
 #profile-intro p {
     margin: .5em 0 .75em 0;
 }
@@ -158,33 +271,37 @@ nav a:hover {
     width: 70%;
     border-radius: 50%;
 }
+}
 
 
-/* Destinations */
+
+
+
+/* DESTINATIONS */
+/* Mobile */
 .destination {
     margin: 2em;
     text-transform: uppercase;
 }
 .destination p {
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 #chartdiv {
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    height: 300px;
 }
 .destination-list {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
 }
 .destination-list a {
-    width: 20%;
-    max-width: 25%;
+    width: 100%;
     flex-grow: 1;
-    padding: 2em 1em 2em;
-    margin: 2em 1em 0em;
+    padding: 0.5em 0;
+    margin: 1em 0 0;
     background-color: #c4e1ff;
     font-size: 1.75rem;
     text-align: center;
@@ -194,9 +311,33 @@ nav a:hover {
     background-color: #659dbd;
 }
 
+/* Desktop */
+@media (min-width: 1024px) {
+    .destination p {
+        font-size: 2rem;
+    }
+    #chartdiv {
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%; 
+        height: 500px;
+    }
+    .destination-list {
+        flex-direction: row;
+    }
+    .destination-list a {
+        width: 20%;
+        max-width: 25%;
+        padding: 2em 1em 2em;
+        margin: 2em 1em 0em;
+    }
+}
 
 
-/* Country/City Page */
+
+
+
+/* COUNTRY/CITY PAGE */
 .dest-container {
     margin: 0 8em;
     text-align: justify;
@@ -240,106 +381,11 @@ nav a:hover {
 
 
 
-/* Footer */
+
+
+/* FOOTER */
 .footer {
     margin: 2em;
     padding: 1em;
 }
 
-
-/* RESIZING FOR HOMEPAGE
-@media only screen and (max-width: 1075px) {
-    #nav-left, #nav-right {
-        font-size: 2.25rem;
-    }
-}
-
-@media only screen and (max-width: 850px) {
-    #nav-left {
-        font-size: 2.25rem;
-    }
-    #nav-right {
-        display: none;
-    }
-}
-
-@media only screen and (max-width: 700px) {
-    #nav-left, #nav-right {
-        font-size: 1.875rem;
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .hero-content {
-        width: 100%;
-        padding: 0;
-    }
-    #intro1 {
-        font-size: 5.5rem;
-    }
-    #intro2 {
-        font-size: 1.65rem;
-    }
-    #intro3 {
-        font-size: 2.75rem;
-    }
-}
-
-@media only screen and (max-width: 450px) {
-    #nav-left {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        font-size: 1rem;
-    }
-    #nav-left li {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    #intro1 {
-        font-size: 4.4rem;
-    }
-    #intro2 {
-        font-size: 1.32rem;
-    }
-    #intro3 {
-        font-size: 2.2rem;
-    }
-}
-
-p {
-    margin: 3em 0 0 3em;
-    font-size: 3.5rem;
-    text-transform: uppercase;
-}
-*/
-
-
-
-/* RESIZING FOR ABOUT ME
-@media only screen and (min-width: 850px) {
-    .profile {
-        padding: 2em 4em;
-    }
-    .profile-intro {
-        text-align: left;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        padding-top: 1em;
-    }
-    .profile-intro img {
-        align-content: right;
-        width: 40%;
-    }
-    .profile-desc {
-        padding-top: 1.5em;
-    }
-}
-
-@media only screen and (min-width: 1050px) {
-    .profile-desc {
-        padding: 3em 5em;
-    }
-}
-*/
