@@ -235,11 +235,11 @@ nav a:hover {
         align-items: center;
     }
     #profile-intro {
-        width: 60%;
+        width: 50%;
         justify-content: center;
     }
     #profile-image {
-        width: 40%;
+        width: 50%;
     }
     #profile-desc {
         width: 100%;
@@ -262,10 +262,16 @@ nav a:hover {
     }
     #profile-desc {
         font-size: 2rem;
+    }#profile-image img {
+        width: 75%;
     }
 }
 
-
+@media (min-width: 1440px) {
+    #profile-image img {
+        width: 65%;
+    }
+}
 
 
 
