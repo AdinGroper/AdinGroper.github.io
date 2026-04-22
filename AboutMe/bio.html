@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Adin's Adventure Log | About Me</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Adin Groper">
+
+    <link rel="stylesheet" href="/main.css">
+    <link rel="icon" href="/Media/airplane-logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&family=Cormorant+Garamond:ital,wght@1,400&family=Crimson+Text&display=swap" rel="stylesheet">
+    <script src="/components/nav.js" defer></script>
+
+    <style>
+        /* ── Page background ─────────────────────────────────────── */
+        body { background: #f2f7f4; }
+
+        /* ── Stars ───────────────────────────────────────────────── */
+        #star-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+        .star { position: absolute; background: #fff; border-radius: 50%; }
+
+        /* ── Dark section ────────────────────────────────────────── */
+        .dark-section {
+            position: relative;
+            padding: 7em 2em 3em;
+            text-align: center;
+            background: linear-gradient(
+                to bottom,
+                #010508  0%,  #030c18  5%,  #060f22 10%,
+                #0a1630 16%,  #0f1e3d 22%,  #142645 28%,
+                #182e52 34%,  #1e3860 40%,  #254470 46%,
+                #2d5482 52%,  #386695 57%,  #4579a8 62%,
+                #568db8 66%,  #72a3c8 69%,  #90bcd6 72%,
+                #b0d2e2 75%,  #cde4ec 77%,  #e2f0f4 79%,
+                #f2f8f7 90%,  #f2f7f4 100%
+            );
+        }
+
+        /* ── Intro block: photo + name ───────────────────────────── */
+        .intro-block {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2em;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        .intro-text { order: 1; }
+        .intro-photo { order: 2; }
+
+        .heading-name {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: 2.4rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #e8f4ee;
+            text-shadow:
+                0 0 30px rgba(140, 210, 170, 0.35),
+                0 0 70px rgba(100, 170, 130, 0.15);
+            margin: 0 0 0.35em;
+        }
+
+        .photo-frame {
+            width: min(300px, 72vw);
+            height: min(300px, 72vw);
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e8f2ee;
+            border: 3px solid #c8a870;
+            outline: 1.5px solid #c8a870;
+            outline-offset: 5px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+            flex-shrink: 0;
+        }
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── Light section ───────────────────────────────────────── */
+        .light-section {
+            background: #f2f7f4;
+            padding: 4em 2em 5em;
+            text-align: center;
+        }
+
+        .bio-container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* ── Light section heading ───────────────────────────────── */
+        .heading-light {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: 1.3rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #3a4a44;
+            margin: 0 0 1.5em;
+            padding-bottom: 0.75em;
+            border-bottom: 1px solid #c0d4c8;
+            display: inline-block;
+        }
+        @media (min-width: 1024px) { .heading-light { font-size: 1.7rem; } }
+
+        /* ── Section labels ──────────────────────────────────────── */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #8b6a3a;
+            margin: 0 0 1.5em;
+        }
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #c8a870;
+        }
+
+        /* ── Bio text ────────────────────────────────────────────── */
+        .bio-text {
+            background: linear-gradient(160deg, #faf2e0 0%, #f2e4c4 100%);
+            border-radius: 8px;
+            box-shadow: 0 6px 28px rgba(80, 50, 20, 0.14), 2px 3px 0 #c8a870;
+            padding: 2.5em 2.5em;
+        }
+        .bio-text p {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #3d2b1a;
+            margin: 0 0 1.2em;
+            text-align: justify;
+            text-transform: none;
+        }
+        .bio-text p:last-child { margin-bottom: 0; }
+        .bio-text p.bio-ps {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #7a5a3a;
+            border-top: 1px solid #c8a870;
+            padding-top: 1em;
+            margin-top: 1.5em;
+            text-align: left;
+        }
+
+        /* ── Desktop ─────────────────────────────────────────────── */
+        @media (min-width: 768px) {
+            .intro-block {
+                flex-direction: row;
+                text-align: left;
+                gap: 3em;
+            }
+            .intro-text { order: 2; flex: 1; }
+            .intro-photo { order: 1; flex-shrink: 0; }
+            .photo-frame { width: 320px; height: 320px; }
+            .heading-name { font-size: 2.8rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .heading-name { font-size: 3.4rem; }
+            .heading-tagline { font-size: 1.3rem; }
+            .photo-frame { width: 360px; height: 360px; }
+            .bio-text p { font-size: 1.1rem; }
+            .bio-container { max-width: 960px; }
+        }
+
+        /* ── Footer ──────────────────────────────────────────────── */
+        footer { background: linear-gradient(to bottom, #2d5a7a, #1e3d58); }
+        .footer { margin: 0 !important; padding: 2em !important; }
+    </style>
+</head>
+
+<body>
+    <site-nav></site-nav>
+
+    <main>
+        <div class="dark-section">
+            <div id="star-field"></div>
+            <div class="intro-block">
+                <div class="intro-photo">
+                    <div class="photo-frame">
+                        <img src="/Media/trevi_headshot.png" alt="Adin">
+                    </div>
+                </div>
+                <div class="intro-text">
+                    <h1 class="heading-name">Hi, I'm Adin!</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="light-section">
+            <div class="bio-container">
+                <h2 class="heading-light">Welcome to my page</h2>
+                <h2 class="section-label">My Story</h2>
+                <div class="bio-text">
+                    <p>Growing up, I loved the concept of travel. Though I'd been out of the country a few times as a toddler,
+                    I can't say I remember much of those trips. It wasn't until I started middle school that I can say
+                    I remember the first trip I took outside my home state of Florida: a summer visit to Washington D.C. with my dad.</p>
+
+                    <p>Every summer after, I'd visit someplace new. It started out with domestic trips, visiting cities within
+                    the U.S., and soon expanded internationally aboard a cruise every few years. While I was in college,
+                    I had the opportunity to study in France as an exchange student for a semester. During those six months,
+                    my love for travel flourished. I couldn't get enough of it! I got to visit new places across 17 different
+                    countries, enjoying new experiences, embracing new cultures, and sharing these adventures with friends along the way.</p>
+
+                    <p>In such a short time, I quickly learned just how big this world truly is. There are so many different
+                    people, places, and cultures that exist, and yet despite these differences, we all share one thing in
+                    common: our humanity. My dream in life is to experience as much of the world as I can, keeping an open
+                    mind and learning everything there is to know about the people and history of this planet. There's just so
+                    much I can't wait to explore.</p>
+
+                    <p>This website serves as a place for me to log my adventures, share photos and experiences from my travels,
+                    and keep the memories alive long after they've happened.</p>
+
+                    <p>Currently I am based in the U.S. out of Boston, Massachusetts, where I work as an aerospace engineer.
+                    When I'm not at work, I love exploring new and exciting places around the world. Embrace adventure with
+                    me as I share my travels near and abroad.</p>
+
+                    <p>I hope you enjoy!</p>
+
+                    <p class="bio-ps">P.S. If you happen to stumble across this page on your own, reach out and let me know how you got here!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer><div class="footer"></div></footer>
+
+    <script>
+    window.addEventListener('load', function () {
+        const field   = document.getElementById('star-field');
+        const section = document.querySelector('.dark-section');
+        const heading = document.querySelector('.heading-name');
+
+        const sr  = section.getBoundingClientRect();
+        const hr  = heading.getBoundingClientRect();
+        const pad = 18;
+
+        const exL = ((hr.left   - pad - sr.left) / sr.width)  * 100;
+        const exR = ((hr.right  + pad - sr.left) / sr.width)  * 100;
+        const exT = ((hr.top    - pad - sr.top)  / sr.height) * 100;
+        const exB = ((hr.bottom + pad - sr.top)  / sr.height) * 100;
+
+        function overlaps(x, y) { return x >= exL && x <= exR && y >= exT && y <= exB; }
+
+        for (let i = 0; i < 180; i++) {
+            let x, y, attempts = 0;
+            do {
+                x = Math.random() * 100;
+                y = Math.random() * 100;
+            } while (overlaps(x, y) && ++attempts < 25);
+
+            const s         = document.createElement('div');
+            s.className     = 'star';
+            s.style.left    = x + '%';
+            s.style.top     = y + '%';
+            const size      = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+            s.style.width   = s.style.height = size + 'px';
+            s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+            const r = Math.random();
+            if      (r < 0.07) s.style.background = '#ffeebb';
+            else if (r < 0.14) s.style.background = '#cce0ff';
+            field.appendChild(s);
+        }
+    });
+    </script>
+</body>
+</html>

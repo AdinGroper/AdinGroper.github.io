@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Adin's Adventure Log | My Travels</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Adin Groper">
+
+    <link rel="stylesheet" href="/main.css">
+    <link rel="icon" href="/Media/airplane-logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
+    <script src="/components/nav.js" defer></script>
+
+    <style>
+        /* ── Page background ─────────────────────────────────────── */
+        body { background: #f2f7f4; }
+
+        /* ── Stars ───────────────────────────────────────────────── */
+        #star-field {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        /* ── Dark section (globe) ────────────────────────────────── */
+        .dark-section {
+            position: relative;
+            padding: 4.5em 2em 4em;
+            text-align: center;
+            background: linear-gradient(
+                to bottom,
+                #010508  0%,  #030c18  5%,  #060f22 10%,
+                #0a1630 16%,  #0f1e3d 22%,  #142645 28%,
+                #182e52 34%,  #1e3860 40%,  #254470 46%,
+                #2d5482 52%,  #386695 57%,  #4579a8 62%,
+                #568db8 66%,  #72a3c8 69%,  #90bcd6 72%,
+                #b0d2e2 75%,  #cde4ec 77%,  #e2f0f4 79%,
+                #f2f8f7 90%,  #f2f7f4 100%
+            );
+        }
+        .heading-dark {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 1.75em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: 1.6rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #e8f4ee;
+            text-shadow:
+                0 0 30px rgba(140, 210, 170, 0.35),
+                0 0 70px rgba(100, 170, 130, 0.15);
+        }
+        #chartdiv { position: relative; z-index: 1; }
+
+        /* ── Light section (cards) ───────────────────────────────── */
+        .light-section {
+            background: #f2f7f4;
+            padding: 3em 2em 4em;
+            text-align: center;
+        }
+        .heading-light {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: 1.3rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #3a4a44;
+            margin: 0 0 2em;
+            padding-bottom: 0.75em;
+            border-bottom: 1px solid #c0d4c8;
+            display: inline-block;
+        }
+
+        /* ── Passport stamps ─────────────────────────────────────── */
+        .destination-list {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            gap: 1em !important;
+            justify-content: center !important;
+            max-width: 780px !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+        }
+        .destination-list a {
+            width: auto !important;
+            flex-grow: 0 !important;
+            font-family: 'Oswald', Arial !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.18em !important;
+            text-transform: uppercase !important;
+            text-decoration: none !important;
+            text-align: center !important;
+            padding: 0.75em 1.3em !important;
+            background: linear-gradient(135deg, #f4e8cc, #e8d8b0) !important;
+            color: #3d2b1a !important;
+            border: 2px solid #8b6a3a !important;
+            outline: 1.5px solid #8b6a3a;
+            outline-offset: 3px;
+            border-radius: 3px !important;
+            margin: 0 !important;
+            transition: transform 0.12s ease, opacity 0.15s !important;
+        }
+        .destination-list a:hover {
+            background: linear-gradient(135deg, #f4e8cc, #e8d8b0) !important;
+            color: #3d2b1a !important;
+            border-color: #8b6a3a !important;
+            transform: scale(0.94) rotate(-0.5deg) !important;
+            box-shadow: none !important;
+            opacity: 0.85;
+        }
+        @media (min-width: 1024px) {
+            .destination-list { max-width: 900px !important; gap: 1.3em !important; padding: 0 3em !important; }
+            .destination-list a { font-size: 1.05rem !important; padding: 1em 1.9em !important; outline-offset: 4px; max-width: none !important; }
+            .heading-dark  { font-size: 2.2rem; }
+            .heading-light { font-size: 1.7rem; }
+        }
+
+        /* ── Globe tooltip ───────────────────────────────────────── */
+        #globe-tooltip {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: 'Oswald', Arial;
+            font-size: 0.9rem;
+            pointer-events: none;
+            display: none;
+            z-index: 100;
+        }
+
+        /* ── Responsive globe ────────────────────────────────────── */
+        #chartdiv { height: unset !important; aspect-ratio: 1; }
+        #chartdiv svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        @media (min-width: 1024px) {
+            #chartdiv { width: min(60%, 500px) !important; margin-left: auto; margin-right: auto; }
+        }
+
+        /* ── Continent groups ────────────────────────────────────── */
+        .continent-group { margin: 2.5em auto 0; max-width: 900px; }
+        .continent-group:first-child { margin-top: 0; }
+        .continent-heading {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: #8b6a3a;
+            margin: 0 0 2.25em;
+        }
+        .continent-heading::before,
+        .continent-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #c8a870;
+        }
+
+        /* ── Footer ──────────────────────────────────────────────── */
+        footer {
+            background: linear-gradient(to bottom, #2d5a7a, #1e3d58);
+        }
+        .footer {
+            margin: 0 !important;
+            padding: 2em !important;
+        }
+    </style>
+</head>
+
+<body>
+    <site-nav></site-nav>
+
+    <main>
+        <div class="dark-section">
+            <div id="star-field"></div>
+            <h2 class="heading-dark">Where I've ventured</h2>
+            <div id="chartdiv"></div>
+        </div>
+
+        <div class="light-section">
+            <h2 class="heading-light">Pages from my passport</h2>
+
+            <div class="continent-group">
+                <h3 class="continent-heading">North America</h3>
+                <div class="destination-list">
+                    <!-- <a href="">Belize</a> -->
+                    <a href="/MyTravels/canada.html">Canada</a>
+                    <!-- <a href="">Dominican Republic</a> -->
+                    <!-- <a href="">Honduras</a> -->
+                    <!-- <a href="">Mexico</a> -->
+                    <!-- <a href="">Panama</a> -->
+                    <!-- <a href="">USA</a> -->
+                </div>
+            </div>
+
+            <div class="continent-group">
+                <h3 class="continent-heading">South America</h3>
+                <div class="destination-list">
+                    <a href="/MyTravels/colombia.html">Colombia</a>
+                </div>
+            </div>
+
+            <div class="continent-group">
+                <h3 class="continent-heading">Europe</h3>
+                <div class="destination-list">
+                    <a href="/MyTravels/andorra.html">Andorra</a>
+                    <a href="/MyTravels/austria.html">Austria</a>
+                    <a href="/MyTravels/czechia.html">Czechia</a>
+                    <a href="/MyTravels/france.html">France</a>
+                    <a href="/MyTravels/hungary.html">Hungary</a>
+                    <!-- <a href="">Germany</a> -->
+                    <!-- <a href="">Ireland</a> -->
+                    <!-- <a href="">Italy</a> -->
+                    <a href="/MyTravels/luxembourg.html">Luxembourg</a>
+                    <a href="/MyTravels/malta.html">Malta</a>
+                    <!-- <a href="">Portugal</a> -->
+                    <!-- <a href="">Spain</a> -->
+                    <!-- <a href="">Switzerland</a> -->
+                    <a href="/MyTravels/vaticancity.html">Vatican City</a>
+                </div>
+            </div>
+
+            <div class="continent-group">
+                <h3 class="continent-heading">Africa</h3>
+                <div class="destination-list">
+                    <!-- <a href="">Morocco</a> -->
+                </div>
+            </div>
+
+            <div class="continent-group">
+                <h3 class="continent-heading">Asia</h3>
+                <div class="destination-list">
+                    <!-- <a href="">China</a> -->
+                    <!-- <a href="">Israel</a> -->
+                    <!-- <a href="">Japan</a> -->
+                    <a href="/MyTravels/singapore.html">Singapore</a>
+                </div>
+            </div>
+
+            <div class="continent-group">
+                <h3 class="continent-heading">Oceania</h3>
+                <div class="destination-list">
+                    <!-- <a href="">Australia</a> -->
+                    <!-- <a href="">New Zealand</a> -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer><div class="footer"></div></footer>
+
+    <div id="globe-tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+    <script>
+    window.addEventListener('load', async function () {
+        const container = document.getElementById('chartdiv');
+        const tooltip = document.getElementById('globe-tooltip');
+        // Fixed logical coordinate space — SVG scales to fit any viewport via viewBox
+        const LOGICAL = 500;
+        const cx     = LOGICAL / 2;   // 250
+        const cy     = LOGICAL / 2;   // 250
+        const radius = LOGICAL / 2 - 10; // 240
+
+        // Visited countries — ISO 3166-1 numeric codes, matching the original globe config
+        const visited = new Set([
+            // North America
+            124,  // Canada
+            484,  // Mexico
+            84,   // Belize
+            340,  // Honduras
+            214,  // Dominican Republic
+            850,  // US Virgin Islands
+            92,   // British Virgin Islands
+            44,   // Bahamas
+            591,  // Panama
+            136,  // Cayman Islands
+            // South America
+            170,  // Colombia
+            // Europe
+            724,  // Spain
+            620,  // Portugal
+            380,  // Italy
+            276,  // Germany
+            756,  // Switzerland
+            40,   // Austria
+            348,  // Hungary
+            203,  // Czechia
+            372,  // Ireland
+            250,  // France
+            20,   // Andorra
+            336,  // Vatican City
+            470,  // Malta
+
+            442,  // Luxembourg
+            // Africa
+            504,  // Morocco
+            // Asia
+            376,  // Israel
+            156,  // China
+            702,  // Singapore
+            392,  // Japan
+        ]);
+
+        const countryNames = {
+            4: 'Afghanistan', 8: 'Albania', 12: 'Algeria', 20: 'Andorra',
+            24: 'Angola', 32: 'Argentina', 36: 'Australia', 40: 'Austria',
+            44: 'Bahamas', 50: 'Bangladesh', 56: 'Belgium', 64: 'Bhutan',
+            68: 'Bolivia', 72: 'Botswana', 76: 'Brazil', 84: 'Belize',
+            90: 'Solomon Islands', 92: 'British Virgin Islands', 96: 'Brunei',
+            100: 'Bulgaria', 104: 'Myanmar', 108: 'Burundi', 116: 'Cambodia',
+            120: 'Cameroon', 124: 'Canada', 136: 'Cayman Islands',
+            140: 'Central African Republic', 144: 'Sri Lanka', 152: 'Chile',
+            156: 'China', 170: 'Colombia', 178: 'Congo', 180: 'DR Congo',
+            188: 'Costa Rica', 191: 'Croatia', 192: 'Cuba', 196: 'Cyprus',
+            203: 'Czechia', 208: 'Denmark', 214: 'Dominican Republic',
+            218: 'Ecuador', 818: 'Egypt', 222: 'El Salvador', 231: 'Ethiopia',
+            246: 'Finland', 250: 'France', 266: 'Gabon', 276: 'Germany',
+            288: 'Ghana', 300: 'Greece', 320: 'Guatemala', 328: 'Guyana',
+            332: 'Haiti', 340: 'Honduras', 348: 'Hungary', 356: 'India',
+            360: 'Indonesia', 364: 'Iran', 368: 'Iraq', 372: 'Ireland',
+            376: 'Israel', 380: 'Italy', 388: 'Jamaica', 392: 'Japan',
+            398: 'Kazakhstan', 400: 'Jordan', 404: 'Kenya', 408: 'North Korea',
+            410: 'South Korea', 414: 'Kuwait', 418: 'Laos', 422: 'Lebanon',
+            430: 'Liberia', 434: 'Libya', 442: 'Luxembourg', 450: 'Madagascar',
+            454: 'Malawi', 458: 'Malaysia', 466: 'Mali', 470: 'Malta',
+            478: 'Mauritania', 484: 'Mexico', 496: 'Mongolia', 504: 'Morocco',
+            508: 'Mozambique', 516: 'Namibia', 524: 'Nepal', 528: 'Netherlands',
+            554: 'New Zealand', 558: 'Nicaragua', 562: 'Niger', 566: 'Nigeria',
+            578: 'Norway', 586: 'Pakistan', 591: 'Panama', 604: 'Peru',
+            608: 'Philippines', 616: 'Poland', 620: 'Portugal', 634: 'Qatar',
+            642: 'Romania', 643: 'Russia', 646: 'Rwanda', 682: 'Saudi Arabia',
+            686: 'Senegal', 694: 'Sierra Leone', 702: 'Singapore', 703: 'Slovakia',
+            706: 'Somalia', 710: 'South Africa', 724: 'Spain', 729: 'Sudan',
+            752: 'Sweden', 756: 'Switzerland', 760: 'Syria', 764: 'Thailand',
+            768: 'Togo', 780: 'Trinidad and Tobago', 784: 'UAE', 788: 'Tunisia',
+            792: 'Turkey', 800: 'Uganda', 804: 'Ukraine', 826: 'United Kingdom',
+            840: 'United States', 850: 'US Virgin Islands', 858: 'Uruguay',
+            860: 'Uzbekistan', 862: 'Venezuela', 704: 'Vietnam', 887: 'Yemen',
+            894: 'Zambia', 716: 'Zimbabwe',
+            // Additional countries missing from the original list
+            28: 'Antigua and Barbuda', 31: 'Azerbaijan', 48: 'Bahrain',
+            52: 'Barbados', 70: 'Bosnia and Herzegovina', 112: 'Belarus',
+            132: 'Cape Verde', 174: 'Comoros', 184: 'Cook Islands',
+            204: 'Benin', 212: 'Dominica', 232: 'Eritrea', 242: 'Fiji',
+            262: 'Djibouti', 270: 'Gambia', 296: 'Kiribati', 308: 'Grenada',
+            324: 'Guinea', 352: 'Iceland', 384: 'Côte d\'Ivoire',
+            426: 'Lesotho', 428: 'Latvia', 440: 'Lithuania', 462: 'Maldives',
+            480: 'Mauritius', 498: 'Moldova', 499: 'Montenegro', 520: 'Nauru',
+            548: 'Vanuatu', 570: 'Niue', 583: 'Micronesia',
+            584: 'Marshall Islands', 585: 'Palau', 598: 'Papua New Guinea',
+            630: 'Puerto Rico', 659: 'Saint Kitts and Nevis', 662: 'Saint Lucia',
+            670: 'Saint Vincent and the Grenadines', 678: 'São Tomé and Príncipe',
+            688: 'Serbia', 690: 'Seychelles', 728: 'South Sudan', 776: 'Tonga',
+            798: 'Tuvalu', 807: 'North Macedonia', 882: 'Samoa',
+            148: 'Chad', 226: 'Equatorial Guinea', 233: 'Estonia',
+            336: 'Vatican City', 624: 'Guinea-Bissau', 748: 'Eswatini',
+            51: 'Armenia', 158: 'Taiwan', 268: 'Georgia', 275: 'Palestine',
+            417: 'Kyrgyzstan', 512: 'Oman', 600: 'Paraguay', 626: 'Timor-Leste',
+            705: 'Slovenia', 740: 'Suriname', 762: 'Tajikistan',
+            834: 'Tanzania', 854: 'Burkina Faso',
+        };
+
+        const projection = d3.geoOrthographic()
+            .scale(radius)
+            .translate([cx, cy])
+            .clipAngle(90)
+            .rotate([0, -20]);
+
+        const pathGen = d3.geoPath().projection(projection);
+
+        // Mutable globe state
+        let rotX = 0;
+        let rotY = -20;
+        let isIntro         = true;   // true while the region tour is running
+        let isDragging      = false;
+        let spinPausedUntil = 0;      // timestamp — spin waits until this passes
+        let prevElapsed     = 0;
+        let introActive               = true;     // globe starts fully dark; cleared when tour ends
+        let globallyRevealedCountries = new Set(); // accumulates across all regions, never resets
+        let currentRegionName         = null;
+        let zoomResetTimeout          = null;
+        let zoomAnimCancelled         = false;
+        let dragActive                = false;
+        let hoveredCountryId          = null;
+        let lastPinchDist             = null;
+
+        const inGlobe = (x, y) => (x - cx) ** 2 + (y - cy) ** 2 <= radius * radius;
+
+        // Convert clientX/clientY (screen pixels) to SVG logical coordinates
+        function toSVGCoords(clientX, clientY) {
+            const rect = svg.node().getBoundingClientRect();
+            return [
+                (clientX - rect.left) * (LOGICAL / rect.width),
+                (clientY - rect.top)  * (LOGICAL / rect.height),
+            ];
+        }
+
+        // Region tour — countries listed in rough left-to-right, top-to-bottom reveal order
+        const regions = [
+            {
+                name: 'North America',
+                rotX: 100.6,  rotY: -44.4,  zoom: 1.2,
+                countries: new Set([
+                    124,  // Canada           (far north)
+                    484,  // Mexico            (southwest)
+                    84,   // Belize            (Central America, west)
+                    340,  // Honduras          (Central America)
+                    591,  // Panama            (southernmost)
+                    136,  // Cayman Islands    (Caribbean, west)
+                    44,   // Bahamas           (Caribbean, north)
+                    214,  // Dominican Republic(Caribbean, center)
+                    850,  // US Virgin Islands (Caribbean, east)
+                    92,   // British Virgin Is.(Caribbean, east)
+                ])
+            },
+            {
+                name: 'South America',
+                rotX: 65.9,   rotY:  20.1,  zoom: 1.2,
+                countries: new Set([170]) // Colombia
+            },
+            {
+                name: 'Europe',
+                rotX: -12.1,  rotY: -53.3,  zoom: 1.5,
+                countries: new Set([
+                    372,  // Ireland     (far west, north)
+                    620,  // Portugal    (far west, south)
+                    724,  // Spain
+                    20,   // Andorra     (between Spain & France)
+                    250,  // France
+                    442,  // Luxembourg
+                    276,  // Germany
+                    756,  // Switzerland
+                    380,  // Italy
+                    336,  // Vatican City (within Italy)
+                    40,   // Austria
+                    203,  // Czechia
+                    348,  // Hungary     (east)
+                    470,  // Malta       (far south)
+                ])
+            },
+            {
+                name: 'Africa',
+                rotX: -18,    rotY:  -1.6,  zoom: 1.2,
+                countries: new Set([504]) // Morocco
+            },
+            {
+                name: 'Asia',
+                rotX: -83.8,  rotY: -33.3,  zoom: 1.2,
+                countries: new Set([
+                    376,  // Israel    (westernmost)
+                    156,  // China
+                    702,  // Singapore (south, ~same longitude as China)
+                    392,  // Japan     (easternmost)
+                ])
+            },
+            {
+                name: 'Oceania',
+                rotX: -134.3, rotY:  25.7,  zoom: 1.3,
+                countries: new Set() // no visited countries yet
+            }
+        ];
+
+        const svg = d3.select('#chartdiv')
+            .append('svg')
+            .attr('viewBox', `0 0 ${LOGICAL} ${LOGICAL}`)
+            .attr('width', '100%')
+            .attr('height', '100%')
+            .style('cursor', 'default');
+
+        const defs = svg.append('defs');
+
+        defs.append('clipPath').attr('id', 'globe-clip')
+            .append('circle').attr('cx', cx).attr('cy', cy).attr('r', radius);
+
+        const shadow = defs.append('filter').attr('id', 'globe-shadow');
+        shadow.append('feDropShadow')
+            .attr('dx', 4).attr('dy', 6)
+            .attr('stdDeviation', 8)
+            .attr('flood-color', '#000')
+            .attr('flood-opacity', 0.5);
+
+        // Ocean
+        svg.append('circle')
+            .attr('cx', cx).attr('cy', cy).attr('r', radius)
+            .attr('fill', '#152738')
+            .attr('filter', 'url(#globe-shadow)');
+
+        const mapGroup = svg.append('g').attr('clip-path', 'url(#globe-clip)');
+
+        // Load world topology from CDN
+        const world = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+        const countries = topojson.feature(world, world.objects.countries);
+        const borders   = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+
+        const HOME = 840; // United States
+
+        function countryFill(id) {
+            if (id === HOME) return '#5ba8c8';
+            if (introActive) {
+                // Globe starts fully dark; countries light up only once revealed
+                return globallyRevealedCountries.has(id) ? '#90ee60' : '#243b23';
+            }
+            return visited.has(id) ? '#4a9e3f' : '#243b23';
+        }
+
+        // Country fills
+        mapGroup.selectAll('path.country')
+            .data(countries.features)
+            .enter()
+            .append('path')
+            .attr('class', 'country')
+            .attr('d', pathGen)
+            .attr('fill', d => countryFill(+d.id))
+            .on('mouseover', function (event, d) {
+                const id   = +d.id;
+                hoveredCountryId = id;
+                const name = countryNames[id];
+                if (id === HOME)          d3.select(this).attr('fill', '#7ec8e3');
+                else if (visited.has(id)) d3.select(this).attr('fill', '#6fcf58');
+                if (name) {
+                    tooltip.textContent = name;
+                    tooltip.style.display = 'block';
+                }
+            })
+            .on('mousemove', function (event) {
+                tooltip.style.left = (event.clientX + 14) + 'px';
+                tooltip.style.top  = (event.clientY - 30) + 'px';
+            })
+            .on('mouseout', function (event, d) {
+                hoveredCountryId = null;
+                d3.select(this).attr('fill', countryFill(+d.id));
+                tooltip.style.display = 'none';
+            })
+            .on('touchstart', function (event, d) {
+                const id   = +d.id;
+                const name = countryNames[id];
+                if (!name) return;
+                const touch = event.touches[0];
+                tooltip.textContent = name;
+                tooltip.style.left  = (touch.clientX + 14) + 'px';
+                tooltip.style.top   = (touch.clientY - 30) + 'px';
+                tooltip.style.display = 'block';
+                setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
+            }, { passive: true });
+
+        // Country borders
+        mapGroup.append('path')
+            .datum(borders)
+            .attr('class', 'borders')
+            .attr('d', pathGen)
+            .attr('fill', 'none')
+            .attr('stroke', '#1a2e19')
+            .attr('stroke-width', 0.4);
+
+        // Small countries too tiny to appear as polygons at this resolution
+        // id matches the numeric code in the visited Set so the reveal sequence can light them up
+        const smallDots = [
+            { name: 'Andorra',                coords: [1.52,    42.51], region: 'Europe',        id: 20   },
+            { name: 'Vatican City',           coords: [12.45,   41.90], region: 'Europe',        id: 336  },
+            { name: 'Malta',                  coords: [14.37,   35.90], region: 'Europe',        id: 470  },
+            { name: 'Luxembourg',             coords: [6.13,    49.82], region: 'Europe',        id: 442  },
+            { name: 'Singapore',              coords: [103.82,   1.35], region: 'Asia',          id: 702  },
+            { name: 'Cayman Islands',         coords: [-81.24,  19.31], region: 'North America', id: 136  },
+            { name: 'British Virgin Islands', coords: [-64.64,  18.43], region: 'North America', id: 92   },
+            { name: 'US Virgin Islands',      coords: [-64.90,  18.34], region: 'North America', id: 850  },
+            // Caribbean micro-states (too small for 110m polygon dataset)
+            { name: 'Antigua and Barbuda',        coords: [-61.80,  17.12], region: 'North America', id: 28   },
+            { name: 'Barbados',                   coords: [-59.55,  13.19], region: 'North America', id: 52   },
+            { name: 'Dominica',                   coords: [-61.37,  15.42], region: 'North America', id: 212  },
+            { name: 'Grenada',                    coords: [-61.68,  12.12], region: 'North America', id: 308  },
+            { name: 'Saint Kitts and Nevis',      coords: [-62.78,  17.26], region: 'North America', id: 659  },
+            { name: 'Saint Lucia',                coords: [-60.97,  13.91], region: 'North America', id: 662  },
+            { name: 'Saint Vincent & Grenadines', coords: [-61.19,  13.25], region: 'North America', id: 670  },
+            // Africa island nations
+            { name: 'Cape Verde',                 coords: [-23.60,  15.12], region: 'Africa',        id: 132  },
+            { name: 'São Tomé and Príncipe',      coords: [6.61,     0.19], region: 'Africa',        id: 678  },
+            { name: 'Comoros',                    coords: [43.33,  -11.70], region: 'Africa',        id: 174  },
+            { name: 'Seychelles',                 coords: [55.49,   -4.68], region: 'Africa',        id: 690  },
+            { name: 'Mauritius',                  coords: [57.55,  -20.27], region: 'Africa',        id: 480  },
+            // Asia island nations
+            { name: 'Bahrain',                    coords: [50.55,   26.07], region: 'Asia',          id: 48   },
+            { name: 'Maldives',                   coords: [73.52,    3.20], region: 'Asia',          id: 462  },
+            // Pacific island nations (Oceania)
+            { name: 'Palau',                      coords: [134.47,   7.51], region: 'Oceania',       id: 585  },
+            { name: 'Micronesia',                 coords: [158.25,   6.92], region: 'Oceania',       id: 583  },
+            { name: 'Marshall Islands',           coords: [171.18,   7.13], region: 'Oceania',       id: 584  },
+            { name: 'Nauru',                      coords: [166.93,  -0.53], region: 'Oceania',       id: 520  },
+            { name: 'Kiribati',                   coords: [173.02,   1.34], region: 'Oceania',       id: 296  },
+            { name: 'Tuvalu',                     coords: [179.22,  -8.52], region: 'Oceania',       id: 798  },
+            { name: 'Tonga',                      coords: [-175.22,-21.13], region: 'Oceania',       id: 776  },
+            { name: 'Samoa',                      coords: [-171.77,-13.83], region: 'Oceania',       id: 882  },
+            { name: 'Niue',                       coords: [-169.87,-19.05], region: 'Oceania',       id: 570  },
+            { name: 'Cook Islands',               coords: [-159.78,-21.24], region: 'Oceania',       id: 184  },
+        ];
+
+        const dots = mapGroup.selectAll('circle.small-dot')
+            .data(smallDots)
+            .enter()
+            .append('circle')
+            .attr('class', 'small-dot')
+            .attr('r', 5)
+            .attr('fill', '#6fcf58')
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 1.5)
+            .style('cursor', 'pointer')
+            .on('mouseover', function (event, d) {
+                d3.select(this).attr('r', 7);
+                tooltip.textContent = d.name;
+                tooltip.style.display = 'block';
+            })
+            .on('mousemove', function (event) {
+                tooltip.style.left = (event.clientX + 14) + 'px';
+                tooltip.style.top  = (event.clientY - 30) + 'px';
+            })
+            .on('mouseout', function () {
+                d3.select(this).attr('r', 5);
+                tooltip.style.display = 'none';
+            })
+            .on('touchstart', function (event, d) {
+                const touch = event.touches[0];
+                tooltip.textContent = d.name;
+                tooltip.style.left  = (touch.clientX + 14) + 'px';
+                tooltip.style.top   = (touch.clientY - 30) + 'px';
+                tooltip.style.display = 'block';
+                setTimeout(() => { tooltip.style.display = 'none'; }, 2000);
+            }, { passive: true });
+
+        function updateDots() {
+            dots.each(function (d) {
+                const pos      = projection(d.coords);
+                const visible  = d3.geoDistance(d.coords, [-rotX, -rotY]) < Math.PI / 2;
+                const revealed   = d.id !== null && globallyRevealedCountries.has(d.id);
+                const isVisited  = d.id !== null && visited.has(d.id);
+
+                // During intro: hide until revealed; after intro: visited only
+                const show = introActive ? revealed : isVisited;
+                // Pulse slightly brighter while its region is the active one
+                const lit  = revealed && d.region === currentRegionName;
+
+                if (pos && visible && show) {
+                    d3.select(this)
+                        .attr('cx', pos[0])
+                        .attr('cy', pos[1])
+                        .attr('r',    lit ? 7 : 5)
+                        .attr('fill', lit ? '#c8ff90' : (isVisited ? '#6fcf58' : '#4a7a4a'))
+                        .style('display', null);
+                } else {
+                    d3.select(this).style('display', 'none');
+                }
+            });
+        }
+
+        // Region name label shown during the intro tour
+        const regionLabel = svg.append('text')
+            .attr('x', cx)
+            .attr('y', cy + radius - 18)
+            .attr('text-anchor', 'middle')
+            .attr('fill', 'rgba(255,255,255,0.9)')
+            .attr('font-family', 'Oswald, Arial')
+            .attr('font-size', '1.1rem')
+            .attr('letter-spacing', '0.2em')
+            .style('pointer-events', 'none')
+            .style('display', 'none');
+
+        // Globe outline ring
+        svg.append('circle')
+            .attr('cx', cx).attr('cy', cy).attr('r', radius)
+            .attr('fill', 'none')
+            .attr('stroke', '#0d1a4a')
+            .attr('stroke-width', 1.5);
+
+        function redraw() {
+            mapGroup.selectAll('path.country').attr('d', pathGen);
+            // Skip fill for hovered country and any currently fading in
+            mapGroup.selectAll('path.country')
+                .filter(d => +d.id !== hoveredCountryId && !revealingIds.has(+d.id))
+                .attr('fill', d => countryFill(+d.id));
+            mapGroup.select('path.borders').attr('d', pathGen);
+            updateDots();
+        }
+
+        // Smoothly animate rotation and scale, returns a Promise.
+        // Resolves early (cancelled) if isIntro becomes false mid-flight.
+        function animateTo(targetRotX, targetRotY, targetScale, duration) {
+            return new Promise(resolve => {
+                const startRotX  = rotX;
+                const startRotY  = rotY;
+                const startScale = projection.scale();
+                // Always take the shorter arc around the globe
+                const dX = ((targetRotX - startRotX) % 360 + 540) % 360 - 180;
+                const dY = targetRotY - startRotY;
+                const t0 = performance.now();
+
+                function tick() {
+                    if (!isIntro) { resolve(); return; } // cancelled by user drag
+                    const t = Math.min((performance.now() - t0) / duration, 1);
+                    const e = d3.easeCubicInOut(t);
+                    rotX = startRotX + dX * e;
+                    rotY = startRotY + dY * e;
+                    projection.rotate([rotX, rotY]).scale(startScale + (targetScale - startScale) * e);
+                    redraw();
+                    if (t < 1) {
+                        requestAnimationFrame(tick);
+                    } else {
+                        rotX = startRotX + dX;
+                        rotY = targetRotY;
+                        resolve();
+                    }
+                }
+                requestAnimationFrame(tick);
+            });
+        }
+
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        // Smoothly animate back to the default scale after the user stops scrolling
+        function startZoomReset() {
+            zoomAnimCancelled = false;
+            const startScale = projection.scale();
+            const startRotY  = rotY;
+            const targetRotY = -20;
+            if (startScale <= radius && Math.abs(startRotY - targetRotY) < 0.01) return;
+            const t0       = performance.now();
+            const duration = 800;
+            // Use d3.timer so this runs in the same batch as the spin timer each frame
+            const resetTimer = d3.timer(function () {
+                if (zoomAnimCancelled) { resetTimer.stop(); return; }
+                const t = Math.min((performance.now() - t0) / duration, 1);
+                const e = d3.easeCubicInOut(t);
+                projection.scale(Math.max(radius, startScale + (radius - startScale) * e));
+                rotY = startRotY + (targetRotY - startRotY) * e;
+                projection.rotate([rotX, rotY]);
+                redraw();
+                if (t >= 1) resetTimer.stop();
+            });
+        }
+
+        function scheduleZoomReset() {
+            clearTimeout(zoomResetTimeout);
+            zoomAnimCancelled = true; // cancel any in-progress reset
+            zoomResetTimeout = setTimeout(() => {
+                if (!isDragging && !isIntro) startZoomReset();
+            }, 3000);
+        }
+
+        const revealingIds = new Set();
+
+        // Reveals the visited countries in a region one at a time, leaving them lit permanently
+        async function revealRegion(region) {
+            currentRegionName = region.name;
+            regionLabel.text(region.name.toUpperCase()).style('display', null);
+            mapGroup.selectAll('path.country').attr('d', pathGen);
+            mapGroup.select('path.borders').attr('d', pathGen);
+            updateDots();
+
+            for (const id of region.countries) {
+                if (!isIntro) return;
+                globallyRevealedCountries.add(id);
+                revealingIds.add(id);
+
+                // Fade the country in rather than snapping it
+                mapGroup.selectAll('path.country')
+                    .filter(d => +d.id === id)
+                    .transition().duration(400).ease(d3.easeCubicOut)
+                    .attr('fill', '#90ee60')
+                    .on('end', () => revealingIds.delete(id));
+
+                updateDots();
+                await sleep(180);
+            }
+
+            await sleep(700); // pause with all countries lit before moving on
+
+            currentRegionName = null;
+            regionLabel.style('display', 'none');
+            redraw();
+        }
+
+        // Intro region tour
+        async function runIntro() {
+            for (const region of regions) {
+                await animateTo(region.rotX, region.rotY, radius * region.zoom, 1400);
+                if (!isIntro) break;
+                await revealRegion(region);
+                if (!isIntro) break;
+            }
+
+            if (isIntro) {
+                // Tour finished naturally — glide back to default view
+                await animateTo(0, -20, radius, 1200);
+            }
+
+            // Clean up any partial state left by a cancelled intro
+            currentRegionName = null;
+            regionLabel.style('display', 'none');
+            projection.scale(radius);
+            introActive = false;
+            isIntro     = false;
+            redraw();
+        }
+
+        // Auto-rotation timer — paused during intro and briefly after drag/click
+        const SPEED = 0.008;
+        d3.timer(function (elapsed) {
+            const dt = elapsed - prevElapsed;
+            prevElapsed = elapsed;
+            if (!isIntro && !isDragging && performance.now() > spinPausedUntil && projection.scale() <= radius) {
+                rotX += dt * SPEED;
+                projection.rotate([rotX, rotY]);
+                redraw();
+            }
+        });
+
+        // Cursor: grab only when hovering inside the globe circle
+        svg.on('mousemove.cursor', function (event) {
+            const [mx, my] = d3.pointer(event);
+            svg.style('cursor', isDragging ? 'grabbing' : (inGlobe(mx, my) ? 'grab' : 'default'));
+        });
+
+        // Drag to rotate — also cancels the intro tour if it's still running
+        svg.call(d3.drag()
+            .on('start', function (event) {
+                if (!inGlobe(event.x, event.y)) { dragActive = false; return; }
+                dragActive        = true;
+                const wasIntro    = isIntro;
+                isIntro           = false;
+                isDragging        = true;
+                introActive       = false;
+                currentRegionName = null;
+                regionLabel.style('display', 'none');
+                zoomAnimCancelled = true;
+                clearTimeout(zoomResetTimeout);
+                if (wasIntro) projection.scale(radius);
+                tooltip.style.display = 'none';
+                svg.style('cursor', 'grabbing');
+                redraw();
+            })
+            .on('drag', function (event) {
+                if (!dragActive) return;
+                const dragSensitivity = 0.4 / (projection.scale() / radius);
+                rotX += event.dx * dragSensitivity;
+                rotY = Math.max(-90, Math.min(90, rotY - event.dy * dragSensitivity));
+                projection.rotate([rotX, rotY]);
+                redraw();
+            })
+            .on('end', function () {
+                if (!dragActive) return;
+                dragActive      = false;
+                isDragging      = false;
+                spinPausedUntil = performance.now() + 3000;
+                scheduleZoomReset();
+                svg.style('cursor', 'grab');
+            })
+        );
+
+        // Mouse-wheel zoom — disabled during intro tour
+        svg.node().addEventListener('wheel', function (event) {
+            const [lx, ly] = toSVGCoords(event.clientX, event.clientY);
+            if (!inGlobe(lx, ly)) return;
+            event.preventDefault();
+            if (isIntro) return;
+            const factor = event.deltaY < 0 ? 1.06 : 1 / 1.06;
+            const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
+            projection.scale(newScale);
+            redraw();
+            scheduleZoomReset(); // zoom resets 3 seconds after last scroll
+        }, { passive: false });
+
+        // Touch: track pinch start distance
+        svg.node().addEventListener('touchstart', function (event) {
+            if (event.touches.length === 2) {
+                const t0 = event.touches[0], t1 = event.touches[1];
+                lastPinchDist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+            }
+        }, { passive: true });
+
+        // Touch: pinch-to-zoom + prevent page scroll while dragging globe
+        svg.node().addEventListener('touchmove', function (event) {
+            if (event.touches.length === 2 && lastPinchDist !== null) {
+                event.preventDefault();
+                if (!isIntro) {
+                    const t0 = event.touches[0], t1 = event.touches[1];
+                    const dist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+                    const factor = dist / lastPinchDist;
+                    lastPinchDist = dist;
+                    const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
+                    projection.scale(newScale);
+                    redraw();
+                    scheduleZoomReset();
+                }
+            } else if (dragActive) {
+                event.preventDefault(); // prevent page scroll while single-finger dragging globe
+            }
+        }, { passive: false });
+
+        // Touch: reset pinch tracking on finger lift
+        svg.node().addEventListener('touchend', function () {
+            lastPinchDist = null;
+        }, { passive: true });
+
+        runIntro();
+    });
+    </script>
+
+    <script>
+    // Star field — avoids the heading text bounding box
+    window.addEventListener('load', function () {
+        const field   = document.getElementById('star-field');
+        const section = document.querySelector('.dark-section');
+        const heading = document.querySelector('.heading-dark');
+
+        const sr  = section.getBoundingClientRect();
+        const hr  = heading.getBoundingClientRect();
+        const pad = 18;
+
+        const exL = ((hr.left   - pad - sr.left) / sr.width)  * 100;
+        const exR = ((hr.right  + pad - sr.left) / sr.width)  * 100;
+        const exT = ((hr.top    - pad - sr.top)  / sr.height) * 100;
+        const exB = ((hr.bottom + pad - sr.top)  / sr.height) * 100;
+
+        function overlaps(x, y) {
+            return x >= exL && x <= exR && y >= exT && y <= exB;
+        }
+
+        for (let i = 0; i < 200; i++) {
+            let x, y, attempts = 0;
+            do {
+                x = Math.random() * 100;
+                y = Math.random() * 100;
+            } while (overlaps(x, y) && ++attempts < 25);
+
+            const s         = document.createElement('div');
+            s.className     = 'star';
+            s.style.left    = x + '%';
+            s.style.top     = y + '%';
+            const size      = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+            s.style.width   = s.style.height = size + 'px';
+            s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+            const r = Math.random();
+            if      (r < 0.07) s.style.background = '#ffeebb';
+            else if (r < 0.14) s.style.background = '#cce0ff';
+            field.appendChild(s);
+        }
+    });
+    </script>
+</body>
+</html>

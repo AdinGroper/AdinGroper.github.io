@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Layout Demo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+    <script src="/components/nav.js" defer></script>
+    <style>
+
+        /* ── Body gradient ───────────────────────────────────────── */
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(
+                to bottom,
+                #010508  0%,  #030c18  5%,  #060f22 10%,
+                #0a1630 16%,  #0f1e3d 22%,  #142645 28%,
+                #182e52 34%,  #1e3860 40%,  #254470 46%,
+                #2d5482 52%,  #386695 57%,  #4579a8 62%,
+                #568db8 66%,  #72a3c8 69%,  #90bcd6 72%,
+                #b0d2e2 75%,  #cde4ec 77%,  #e2f0f4 79%,
+                #f2f8f7 81%,  #f6f9f7 100%
+            );
+            min-height: 100vh;
+        }
+
+        /* ── Stars ───────────────────────────────────────────────── */
+        #star-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+        .star       { position: absolute; background: #fff; border-radius: 50%; }
+
+        /* ── Dark section ────────────────────────────────────────── */
+        .dark-section { position: relative; padding: 4.5em 2em 4em; text-align: center; }
+        .heading-dark {
+            position: relative; z-index: 1;
+            margin: 0 0 1.75em;
+            font-family: 'Raleway', sans-serif; font-weight: 300;
+            font-size: 1.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+            color: #e8f4ee;
+            text-shadow: 0 0 30px rgba(140,210,170,0.35), 0 0 70px rgba(100,170,130,0.15);
+        }
+        .globe-placeholder {
+            position: relative; z-index: 1;
+            width: min(80vw, 500px); aspect-ratio: 1; margin: 0 auto; border-radius: 50%;
+            background: radial-gradient(circle at 38% 35%, #2a4a2a 0%, #1a3020 30%, #0f2235 60%, #081520 85%, #040c18 100%);
+            box-shadow: inset -20px -20px 50px rgba(0,0,0,0.6), inset 10px 10px 30px rgba(40,80,40,0.15), 0 0 60px rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.12); font-family: 'Oswald', Arial; font-size: 1rem; letter-spacing: 0.2em;
+        }
+        @media (min-width: 1024px) { .heading-dark { font-size: 2.2rem; } }
+
+        /* ── Light section ───────────────────────────────────────── */
+        .light-section { background: #f2f7f4; padding: 3em 2em 4em; text-align: center; }
+        .heading-light {
+            font-family: 'Raleway', sans-serif; font-weight: 300;
+            font-size: 1.3rem; letter-spacing: 0.28em; text-transform: uppercase;
+            color: #3a4a44; margin: 0 0 1.5em; padding-bottom: 0.75em;
+            border-bottom: 1px solid #c0d4c8; display: inline-block;
+        }
+        @media (min-width: 1024px) { .heading-light { font-size: 1.7rem; } }
+
+        /* ── Layout tab buttons ──────────────────────────────────── */
+        .layout-tabs {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 0.5em; margin-bottom: 2.5em;
+        }
+        .tab-btn {
+            font-family: 'Oswald', Arial; font-size: 0.72rem;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            padding: 0.4em 1em; border: 1px solid #8aaa9a; border-radius: 4px;
+            background: transparent; color: #3a5a4a; cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .tab-btn.active { background: #2a4a3a; color: #c8dcc8; border-color: #2a4a3a; }
+
+        .layout { display: none; }
+        .layout.active { display: block; }
+
+
+        /* ══════════════════════════════════════════════════════════
+           OPTION A — Compact grid
+        ══════════════════════════════════════════════════════════ */
+        .layout-a .card-row {
+            display: flex; flex-wrap: wrap; gap: 0.5em;
+            justify-content: center; max-width: 800px; margin: 0 auto;
+        }
+        .layout-a .card-row a {
+            font-family: 'Oswald', Arial; font-size: 0.95rem;
+            letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+            text-align: center; padding: 0.55em 1.1em;
+            background: linear-gradient(135deg, #f4e8cc, #e8d8b0);
+            color: #3d2b1a; border: 1px solid #c8a870; border-radius: 5px;
+            flex: 1; min-width: 100px; max-width: 150px;
+            transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+        }
+        .layout-a .card-row a:hover {
+            background: linear-gradient(135deg, #ecddb8, #dcc89a);
+            color: #1e1208; border-color: #a8885a;
+            transform: translateY(-2px); box-shadow: 0 5px 14px rgba(100,60,20,0.18);
+        }
+
+
+        /* ══════════════════════════════════════════════════════════
+           OPTION B — Table of contents
+        ══════════════════════════════════════════════════════════ */
+        .layout-b .page {
+            background: linear-gradient(160deg, #faf2e0 0%, #f2e4c4 100%);
+            border-radius: 8px;
+            box-shadow: 0 6px 28px rgba(80,50,20,0.18), 2px 3px 0 #c8a870;
+            max-width: 680px; margin: 0 auto;
+            padding: 2.5em 3em;
+        }
+        .layout-b .toc-grid {
+            display: grid; grid-template-columns: 1fr; gap: 0;
+        }
+        @media (min-width: 560px) {
+            .layout-b .toc-grid { grid-template-columns: 1fr 1fr; gap: 0 2em; }
+        }
+        .layout-b .toc-row {
+            display: flex; align-items: baseline;
+            padding: 0.5em 0.3em;
+            border-bottom: 1px solid rgba(180,140,80,0.3);
+            text-decoration: none; color: #3d2b1a;
+            font-family: 'Oswald', Arial; font-size: 0.95rem;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            transition: background 0.15s; border-radius: 3px;
+        }
+        .layout-b .toc-row:hover { background: rgba(200,160,80,0.12); }
+        .layout-b .toc-name { flex-shrink: 0; }
+        .layout-b .toc-fill {
+            flex: 1; margin: 0 0.5em;
+            border-bottom: 1.5px dotted #c0a060;
+            position: relative; top: -0.25em;
+        }
+        .layout-b .toc-mark { color: #a07840; font-size: 0.7rem; flex-shrink: 0; }
+
+
+        /* ══════════════════════════════════════════════════════════
+           OPTION C — Passport stamps
+        ══════════════════════════════════════════════════════════ */
+        .layout-c .stamp-grid {
+            display: flex; flex-wrap: wrap; gap: 1em;
+            justify-content: center; max-width: 780px; margin: 0 auto;
+        }
+        .layout-c .stamp {
+            font-family: 'Oswald', Arial; font-size: 0.85rem;
+            letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none;
+            text-align: center;
+            padding: 0.75em 1.3em;
+            background: linear-gradient(135deg, #f4e8cc, #e8d8b0);
+            color: #3d2b1a;
+            border: 2px solid #8b6a3a;
+            outline: 1.5px solid #8b6a3a;
+            outline-offset: 3px;
+            border-radius: 3px;
+            transition: transform 0.12s ease, opacity 0.15s;
+        }
+        .layout-c .stamp:hover {
+            transform: scale(0.94) rotate(-0.5deg);
+            opacity: 0.85;
+        }
+        @media (min-width: 1024px) {
+            .layout-c .stamp-grid { max-width: 900px; gap: 1.3em; padding: 0 3em; }
+            .layout-c .stamp { font-size: 1.05rem; padding: 1em 1.9em; outline-offset: 4px; }
+        }
+
+
+        /* ══════════════════════════════════════════════════════════
+           OPTION D — Ledger rows
+        ══════════════════════════════════════════════════════════ */
+        .layout-d .ledger {
+            background: linear-gradient(to bottom, #faf2e0, #f4e8cc);
+            border-radius: 8px;
+            box-shadow: 0 6px 28px rgba(80,50,20,0.18), 2px 3px 0 #c8a870;
+            max-width: 520px; margin: 0 auto;
+            overflow: hidden; position: relative;
+        }
+        /* Red margin line */
+        .layout-d .ledger::before {
+            content: ''; position: absolute;
+            top: 0; bottom: 0; left: 3.2em; width: 1px;
+            background: rgba(210, 90, 90, 0.35);
+            z-index: 0;
+        }
+        .layout-d .ledger-row {
+            display: flex; align-items: center;
+            padding: 0.65em 1.5em 0.65em 1em;
+            border-bottom: 1px solid rgba(180,140,80,0.3);
+            text-decoration: none; color: #3d2b1a;
+            position: relative; z-index: 1;
+            transition: background 0.15s;
+        }
+        .layout-d .ledger-row:last-child { border-bottom: none; }
+        .layout-d .ledger-row:hover { background: rgba(200,160,80,0.15); }
+        .layout-d .row-num {
+            font-family: 'Cormorant Garamond', serif; font-style: italic;
+            font-size: 0.75rem; color: #a07840;
+            width: 2.2em; flex-shrink: 0; text-align: right;
+            padding-right: 1em;
+        }
+        .layout-d .row-name {
+            font-family: 'Oswald', Arial; font-size: 1rem;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            flex: 1;
+        }
+        .layout-d .row-arrow {
+            color: #c8a870; font-size: 0.85rem; opacity: 0;
+            transition: opacity 0.15s, transform 0.15s;
+            transform: translateX(-4px);
+        }
+        .layout-d .ledger-row:hover .row-arrow {
+            opacity: 1; transform: translateX(0);
+        }
+
+        /* ── Footer ──────────────────────────────────────────────── */
+        .site-footer {
+            background: linear-gradient(to bottom, #2d5a7a, #1e3d58);
+            padding: 2.5em 2em; text-align: center;
+            color: #a0c4d8; font-family: 'Oswald', Arial;
+            font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <site-nav></site-nav>
+
+    <div class="dark-section">
+        <div id="star-field"></div>
+        <h2 class="heading-dark">Where I've ventured</h2>
+        <div class="globe-placeholder">GLOBE</div>
+    </div>
+
+    <div class="light-section">
+        <h2 class="heading-light">Pages from my passport</h2>
+
+        <div class="layout-tabs">
+            <button class="tab-btn active" onclick="show('a',this)">A — Compact Grid</button>
+            <button class="tab-btn"        onclick="show('b',this)">B — Table of Contents</button>
+            <button class="tab-btn"        onclick="show('c',this)">C — Passport Stamps</button>
+            <button class="tab-btn"        onclick="show('d',this)">D — Ledger Rows</button>
+        </div>
+
+        <!-- A: Compact grid -->
+        <div class="layout layout-a active">
+            <div class="card-row">
+                <a href="#">Andorra</a><a href="#">Austria</a><a href="#">Canada</a>
+                <a href="#">Colombia</a><a href="#">Czechia</a><a href="#">France</a>
+                <a href="#">Hungary</a><a href="#">Luxembourg</a><a href="#">Malta</a>
+                <a href="#">Singapore</a><a href="#">Vatican City</a>
+            </div>
+        </div>
+
+        <!-- B: Table of contents -->
+        <div class="layout layout-b">
+            <div class="page">
+                <div class="toc-grid">
+                    <a href="#" class="toc-row"><span class="toc-name">Andorra</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Hungary</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Austria</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Luxembourg</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Canada</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Malta</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Colombia</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Singapore</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Czechia</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">Vatican City</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                    <a href="#" class="toc-row"><span class="toc-name">France</span><span class="toc-fill"></span><span class="toc-mark">✦</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- C: Passport stamps -->
+        <div class="layout layout-c">
+            <div class="stamp-grid">
+                <a href="#" class="stamp">Andorra</a>
+                <a href="#" class="stamp">Austria</a>
+                <a href="#" class="stamp">Canada</a>
+                <a href="#" class="stamp">Colombia</a>
+                <a href="#" class="stamp">Czechia</a>
+                <a href="#" class="stamp">France</a>
+                <a href="#" class="stamp">Hungary</a>
+                <a href="#" class="stamp">Luxembourg</a>
+                <a href="#" class="stamp">Malta</a>
+                <a href="#" class="stamp">Singapore</a>
+                <a href="#" class="stamp">Vatican City</a>
+            </div>
+        </div>
+
+        <!-- D: Ledger rows -->
+        <div class="layout layout-d">
+            <div class="ledger">
+                <a href="#" class="ledger-row"><span class="row-num">01</span><span class="row-name">Andorra</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">02</span><span class="row-name">Austria</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">03</span><span class="row-name">Canada</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">04</span><span class="row-name">Colombia</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">05</span><span class="row-name">Czechia</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">06</span><span class="row-name">France</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">07</span><span class="row-name">Hungary</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">08</span><span class="row-name">Luxembourg</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">09</span><span class="row-name">Malta</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">10</span><span class="row-name">Singapore</span><span class="row-arrow">→</span></a>
+                <a href="#" class="ledger-row"><span class="row-num">11</span><span class="row-name">Vatican City</span><span class="row-arrow">→</span></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-footer">Adin's Adventure Log</div>
+
+    <script>
+        // Star field
+        window.addEventListener('load', function () {
+            const field   = document.getElementById('star-field');
+            const section = document.querySelector('.dark-section');
+            const heading = document.querySelector('.heading-dark');
+            const sr = section.getBoundingClientRect();
+            const hr = heading.getBoundingClientRect();
+            const pad = 18;
+            const exL = ((hr.left   - pad - sr.left) / sr.width)  * 100;
+            const exR = ((hr.right  + pad - sr.left) / sr.width)  * 100;
+            const exT = ((hr.top    - pad - sr.top)  / sr.height) * 100;
+            const exB = ((hr.bottom + pad - sr.top)  / sr.height) * 100;
+            function overlaps(x, y) { return x >= exL && x <= exR && y >= exT && y <= exB; }
+            for (let i = 0; i < 200; i++) {
+                let x, y, attempts = 0;
+                do { x = Math.random() * 100; y = Math.random() * 100; }
+                while (overlaps(x, y) && ++attempts < 25);
+                const s = document.createElement('div');
+                s.className = 'star';
+                s.style.left = x + '%'; s.style.top = y + '%';
+                const size = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+                s.style.width = s.style.height = size + 'px';
+                s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+                const r = Math.random();
+                if      (r < 0.07) s.style.background = '#ffeebb';
+                else if (r < 0.14) s.style.background = '#cce0ff';
+                field.appendChild(s);
+            }
+        });
+
+        // Layout switcher
+        function show(id, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.layout').forEach(l => l.classList.remove('active'));
+            document.querySelector('.layout-' + id).classList.add('active');
+        }
+    </script>
+</body>
+</html>
