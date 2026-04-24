@@ -205,4 +205,10 @@
     }
 
     customElements.define('site-nav', SiteNav);
+
+    // Lazily load content images so they only fetch when near the viewport
+    document.querySelectorAll('main img').forEach(function(img) {
+        if (!img.hasAttribute('loading'))  img.setAttribute('loading',  'lazy');
+        if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+    });
 })();
