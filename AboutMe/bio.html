@@ -8,35 +8,13 @@
     <meta name="author" content="Adin Groper">
 
     <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/theme.css">
     <link rel="icon" href="/Media/airplane-logo.jpg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&family=Cormorant+Garamond:ital,wght@1,400&family=Crimson+Text&display=swap" rel="stylesheet">
     <script src="/components/nav.js" defer></script>
 
     <style>
-        /* ── Page background ─────────────────────────────────────── */
-        body { background: #f2f7f4; }
-
-        /* ── Stars ───────────────────────────────────────────────── */
-        #star-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-        .star { position: absolute; background: #fff; border-radius: 50%; }
-
         /* ── Dark section ────────────────────────────────────────── */
-        .dark-section {
-            position: relative;
-            padding: 7em 2em 3em;
-            text-align: center;
-            background: linear-gradient(
-                to bottom,
-                #010508  0%,  #030c18  5%,  #060f22 10%,
-                #0a1630 16%,  #0f1e3d 22%,  #142645 28%,
-                #182e52 34%,  #1e3860 40%,  #254470 46%,
-                #2d5482 52%,  #386695 57%,  #4579a8 62%,
-                #568db8 66%,  #72a3c8 69%,  #90bcd6 72%,
-                #b0d2e2 75%,  #cde4ec 77%,  #e2f0f4 79%,
-                #f2f8f7 90%,  #f2f7f4 100%
-            );
-        }
+        .dark-section { padding: 7em 2em 3em; }
 
         /* ── Intro block: photo + name ───────────────────────────── */
         .intro-block {
@@ -86,31 +64,13 @@
         }
 
         /* ── Light section ───────────────────────────────────────── */
-        .light-section {
-            background: #f2f7f4;
-            padding: 4em 2em 5em;
-            text-align: center;
-        }
+        .light-section { padding: 4em 2em 5em; text-align: center; }
 
         .bio-container {
             max-width: 720px;
             margin: 0 auto;
         }
 
-        /* ── Light section heading ───────────────────────────────── */
-        .heading-light {
-            font-family: 'Raleway', sans-serif;
-            font-weight: 300;
-            font-size: 1.3rem;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: #3a4a44;
-            margin: 0 0 1.5em;
-            padding-bottom: 0.75em;
-            border-bottom: 1px solid #c0d4c8;
-            display: inline-block;
-        }
-        @media (min-width: 1024px) { .heading-light { font-size: 1.7rem; } }
 
         /* ── Section labels ──────────────────────────────────────── */
         .section-label {
@@ -134,22 +94,8 @@
         }
 
         /* ── Bio text ────────────────────────────────────────────── */
-        .bio-text {
-            background: linear-gradient(160deg, #faf2e0 0%, #f2e4c4 100%);
-            border-radius: 8px;
-            box-shadow: 0 6px 28px rgba(80, 50, 20, 0.14), 2px 3px 0 #c8a870;
-            padding: 2.5em 2.5em;
-        }
-        .bio-text p {
-            font-family: 'Crimson Text', serif;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #3d2b1a;
-            margin: 0 0 1.2em;
-            text-align: justify;
-            text-transform: none;
-        }
-        .bio-text p:last-child { margin-bottom: 0; }
+        .bio-text { padding: 2.5em 2.5em; }
+        .bio-text p { text-align: justify; text-transform: none; }
         .bio-text p.bio-ps {
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
@@ -182,9 +128,6 @@
             .bio-container { max-width: 960px; }
         }
 
-        /* ── Footer ──────────────────────────────────────────────── */
-        footer { background: linear-gradient(to bottom, #2d5a7a, #1e3d58); }
-        .footer { margin: 0 !important; padding: 2em !important; }
     </style>
 </head>
 
@@ -210,7 +153,7 @@
             <div class="bio-container">
                 <h2 class="heading-light">Welcome to my page</h2>
                 <h2 class="section-label">My Story</h2>
-                <div class="bio-text">
+                <div class="parchment-card bio-text">
                     <p>Growing up, I loved the concept of travel. Though I'd been out of the country a few times as a toddler,
                     I can't say I remember much of those trips. It wasn't until I started middle school that I can say
                     I remember the first trip I took outside my home state of Florida: a summer visit to Washington D.C. with my dad.</p>

@@ -8,45 +8,13 @@
     <meta name="author" content="Adin Groper">
 
     <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/theme.css">
     <link rel="icon" href="/Media/airplane-logo.jpg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&display=swap" rel="stylesheet">
     <script src="/components/nav.js" defer></script>
 
     <style>
-        /* ── Page background ─────────────────────────────────────── */
-        body { background: #f2f7f4; }
-
-        /* ── Stars ───────────────────────────────────────────────── */
-        #star-field {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 0;
-        }
-        .star {
-            position: absolute;
-            background: #fff;
-            border-radius: 50%;
-        }
-
-        /* ── Dark section (globe) ────────────────────────────────── */
-        .dark-section {
-            position: relative;
-            padding: 4.5em 2em 4em;
-            text-align: center;
-            background: linear-gradient(
-                to bottom,
-                #010508  0%,  #030c18  5%,  #060f22 10%,
-                #0a1630 16%,  #0f1e3d 22%,  #142645 28%,
-                #182e52 34%,  #1e3860 40%,  #254470 46%,
-                #2d5482 52%,  #386695 57%,  #4579a8 62%,
-                #568db8 66%,  #72a3c8 69%,  #90bcd6 72%,
-                #b0d2e2 75%,  #cde4ec 77%,  #e2f0f4 79%,
-                #f2f8f7 90%,  #f2f7f4 100%
-            );
-        }
+        /* ── Dark section ────────────────────────────────────────── */
+        .dark-section { padding: 4.5em 2em 4em; }
         .heading-dark {
             position: relative;
             z-index: 1;
@@ -63,68 +31,13 @@
         }
         #chartdiv { position: relative; z-index: 1; }
 
-        /* ── Light section (cards) ───────────────────────────────── */
-        .light-section {
-            background: #f2f7f4;
-            padding: 3em 2em 4em;
-            text-align: center;
-        }
-        .heading-light {
-            font-family: 'Raleway', sans-serif;
-            font-weight: 300;
-            font-size: 1.3rem;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: #3a4a44;
-            margin: 0 0 2em;
-            padding-bottom: 0.75em;
-            border-bottom: 1px solid #c0d4c8;
-            display: inline-block;
-        }
+        /* ── Light section ───────────────────────────────────────── */
+        .light-section { padding: 3em 2em 4em; text-align: center; }
+        .heading-light { margin-bottom: 2em; }
 
-        /* ── Passport stamps ─────────────────────────────────────── */
-        .destination-list {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: wrap !important;
-            gap: 1em !important;
-            justify-content: center !important;
-            max-width: 780px !important;
-            margin: 0 auto !important;
-            padding: 0 !important;
-        }
-        .destination-list a {
-            width: auto !important;
-            flex-grow: 0 !important;
-            font-family: 'Oswald', Arial !important;
-            font-size: 0.85rem !important;
-            letter-spacing: 0.18em !important;
-            text-transform: uppercase !important;
-            text-decoration: none !important;
-            text-align: center !important;
-            padding: 0.75em 1.3em !important;
-            background: linear-gradient(135deg, #f4e8cc, #e8d8b0) !important;
-            color: #3d2b1a !important;
-            border: 2px solid #8b6a3a !important;
-            outline: 1.5px solid #8b6a3a;
-            outline-offset: 3px;
-            border-radius: 3px !important;
-            margin: 0 !important;
-            transition: transform 0.12s ease, opacity 0.15s !important;
-        }
-        .destination-list a:hover {
-            background: linear-gradient(135deg, #f4e8cc, #e8d8b0) !important;
-            color: #3d2b1a !important;
-            border-color: #8b6a3a !important;
-            transform: scale(0.94) rotate(-0.5deg) !important;
-            box-shadow: none !important;
-            opacity: 0.85;
-        }
         @media (min-width: 1024px) {
-            .destination-list { max-width: 900px !important; gap: 1.3em !important; padding: 0 3em !important; }
-            .destination-list a { font-size: 1.05rem !important; padding: 1em 1.9em !important; outline-offset: 4px; max-width: none !important; }
-            .heading-dark  { font-size: 2.2rem; }
-            .heading-light { font-size: 1.7rem; }
+            .destination-list { padding: 0 3em !important; }
+            .heading-dark { font-size: 2.2rem; }
         }
 
         /* ── Globe tooltip ───────────────────────────────────────── */
@@ -149,36 +62,7 @@
         }
 
         /* ── Continent groups ────────────────────────────────────── */
-        .continent-group { margin: 2.5em auto 0; max-width: 900px; }
-        .continent-group:first-child { margin-top: 0; }
-        .continent-heading {
-            display: flex;
-            align-items: center;
-            gap: 0.75em;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 300;
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: #8b6a3a;
-            margin: 0 0 2.25em;
-        }
-        .continent-heading::before,
-        .continent-heading::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #c8a870;
-        }
-
-        /* ── Footer ──────────────────────────────────────────────── */
-        footer {
-            background: linear-gradient(to bottom, #2d5a7a, #1e3d58);
-        }
-        .footer {
-            margin: 0 !important;
-            padding: 2em !important;
-        }
+        .continent-group { max-width: 900px; }
     </style>
 </head>
 

@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400&family=Crimson+Text&family=Cormorant+Garamond:ital,wght@1,400&display=swap');
+
+/* ── Base ─────────────────────────────────────────────────────── */
+body { background: #f2f7f4; }
+
+/* ── Stars ────────────────────────────────────────────────────── */
+#star-field { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.star { position: absolute; background: #fff; border-radius: 50%; }
+
+/* ── Dark section ─────────────────────────────────────────────── */
+/* padding set per page */
+.dark-section {
+    position: relative;
+    text-align: center;
+    background: linear-gradient(
+        to bottom,
+        #010508  0%,  #030c18  5%,  #060f22 10%,
+        #0a1630 16%,  #0f1e3d 22%,  #142645 28%,
+        #182e52 34%,  #1e3860 40%,  #254470 46%,
+        #2d5482 52%,  #386695 57%,  #4579a8 62%,
+        #568db8 66%,  #72a3c8 69%,  #90bcd6 72%,
+        #b0d2e2 75%,  #cde4ec 77%,  #e2f0f4 79%,
+        #f2f8f7 90%,  #f2f7f4 100%
+    );
+}
+
+/* ── Dark section headings (light text + glow) ────────────────── */
+/* font-size, letter-spacing, and margin set per page */
+.heading-dark,
+.heading-name {
+    position: relative;
+    z-index: 1;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #e8f4ee;
+    text-shadow:
+        0 0 30px rgba(140, 210, 170, 0.35),
+        0 0 70px rgba(100, 170, 130, 0.15);
+    margin: 0;
+}
+
+/* ── Light section ────────────────────────────────────────────── */
+/* padding set per page */
+.light-section { background: #f2f7f4; }
+
+/* ── Light section headings ───────────────────────────────────── */
+.heading-light {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    font-size: 1.3rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #3a4a44;
+    margin: 0 0 1.5em;
+    padding-bottom: 0.75em;
+    border-bottom: 1px solid #c0d4c8;
+    display: inline-block;
+}
+@media (min-width: 1024px) { .heading-light { font-size: 1.7rem; } }
+
+/* ── Country/city page headings (dark text on light bg) ───────── */
+/* font-size and letter-spacing set per page */
+.heading-country,
+.heading-city {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #3a4a44;
+    margin: 0;
+}
+
+/* ── Date subtitle on city pages ──────────────────────────────── */
+.heading-date {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #8b6a3a;
+    margin: 0.4em 0 0;
+}
+
+/* ── Breadcrumb ───────────────────────────────────────────────── */
+.breadcrumb {
+    display: inline-block;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8b6a3a;
+    text-decoration: none;
+    margin-bottom: 0.75em;
+}
+.breadcrumb:hover { color: #3a4a44; }
+
+/* ── Parchment card ───────────────────────────────────────────── */
+/* padding and margin set per page */
+.parchment-card {
+    background: linear-gradient(160deg, #faf2e0 0%, #f2e4c4 100%);
+    border-radius: 8px;
+    box-shadow: 0 6px 28px rgba(80, 50, 20, 0.14), 2px 3px 0 #c8a870;
+}
+.parchment-card p {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #3d2b1a;
+    margin: 0 0 1.2em;
+    text-align: justify;
+}
+.parchment-card p:last-child { margin-bottom: 0; }
+
+/* ── Year / continent dividers ────────────────────────────────── */
+.year-group,
+.continent-group { margin: 2.5em auto 0; }
+.year-group:first-of-type,
+.continent-group:first-child { margin-top: 0; }
+.year-heading,
+.continent-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #8b6a3a;
+    margin: 0 0 2.25em;
+}
+.year-heading::before, .year-heading::after,
+.continent-heading::before, .continent-heading::after {
+    content: ''; flex: 1; height: 1px; background: #c8a870;
+}
+
+/* ── Passport stamps ──────────────────────────────────────────── */
+.destination-list {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 1em !important;
+    justify-content: center !important;
+    max-width: 780px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+.destination-list a {
+    width: auto !important;
+    flex-grow: 0 !important;
+    font-family: 'Oswald', Arial !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.18em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    padding: 0.75em 1.3em !important;
+    background: linear-gradient(135deg, #f4e8cc, #e8d8b0) !important;
+    color: #3d2b1a !important;
+    border: 2px solid #8b6a3a !important;
+    outline: 1.5px solid #8b6a3a;
+    outline-offset: 3px;
+    border-radius: 3px !important;
+    margin: 0 !important;
+    transition: transform 0.12s ease, opacity 0.15s !important;
+}
+.destination-list a:hover {
+    background: linear-gradient(135deg, #f4e8cc, #e8d8b0) !important;
+    color: #3d2b1a !important;
+    border-color: #8b6a3a !important;
+    transform: scale(0.94) rotate(-0.5deg) !important;
+    box-shadow: none !important;
+    opacity: 0.85;
+}
+@media (min-width: 1024px) {
+    .destination-list { max-width: 900px !important; gap: 1.3em !important; }
+    .destination-list a { font-size: 1.05rem !important; padding: 1em 1.9em !important; outline-offset: 4px; max-width: none !important; }
+}
+
+/* ── City page body text ──────────────────────────────────────── */
+.city-body p {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #2e2e2e;
+    margin: 0 0 1.4em;
+    text-align: justify;
+}
+.city-body p:last-child { margin-bottom: 0; }
+
+/* ── City page photos ─────────────────────────────────────────── */
+.city-photo { margin: 2em 0; text-align: center; }
+.city-photo img {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    display: inline-block;
+}
+
+/* ── City page photo + text combos ───────────────────────────── */
+.city-combo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+    align-items: flex-start;
+    margin: 2em 0;
+}
+.city-combo img {
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    flex: 1 1 240px;
+    object-fit: cover;
+    max-height: 380px;
+}
+.city-combo p {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #2e2e2e;
+    text-align: justify;
+    flex: 1 1 260px;
+    margin: 0;
+}
+@media (min-width: 1024px) {
+    .city-body p, .city-combo p { font-size: 1.2rem; }
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+footer { background: linear-gradient(to bottom, #2d5a7a, #1e3d58); }
+.footer { margin: 0 !important; padding: 2em !important; }

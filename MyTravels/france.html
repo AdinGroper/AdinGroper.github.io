@@ -2,59 +2,103 @@
 <html lang="en-US">
 
 <head>
-    <title>Adin's Adventure Log | My Travels - France</title>
+    <title>Adin's Adventure Log | France</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Adin Groper">
 
     <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/theme.css">
     <link rel="icon" href="/Media/airplane-logo.jpg">
+    <script src="/components/nav.js" defer></script>
+
+    <style>
+        /* ── Dark section: decorative sky only ───────────────────── */
+        .dark-section { padding: 10em 0 0; }
+
+        /* ── Light section ───────────────────────────────────────── */
+        .light-section { padding: 3em 2em 5em; text-align: center; }
+
+        .country-container { max-width: 720px; margin: 0 auto; }
+
+        /* ── Country heading ─────────────────────────────────────── */
+        .heading-country {
+            font-size: clamp(2.4rem, 6vw, 4.5rem);
+            letter-spacing: 0.3em;
+            margin: 0 0 1.2em;
+        }
+
+        /* ── Intro card ──────────────────────────────────────────── */
+        .country-intro {
+            padding: 2em 2.5em;
+            margin: 0 auto 3em;
+            text-align: left;
+        }
+
+        /* ── Desktop ─────────────────────────────────────────────── */
+        @media (min-width: 1024px) {
+            .country-container { max-width: 960px; }
+            .destination-list { padding: 0 3em !important; }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="nav-container">
-        <header>
-            <a href="/index.html" class="logo">
-                <img src="/Media/airplane-logo.jpg" alt="Logo">
-            </a>
-
-            <nav>
-                <ul id="nav-left">
-                    <li>EXPLORE</li>
-                    <li>EMBRACE</li>
-                    <li>ENJOY</li>
-                </ul>
-                <ul id="nav-right">
-                    <li><a href="/MyTravels/destinations.html">MY TRAVELS</a></li>
-                    <li><a href="/AboutMe/bio.html">ABOUT ME</a></li>
-                </ul>
-            </nav>
-        </header>
-    </div>
+    <site-nav></site-nav>
 
     <main>
-     <div class="dest-container">
-         <div class="dest-heading">
-            <h1>France</h1>
+        <div class="dark-section">
+            <div id="star-field"></div>
         </div>
-    
-        <div class="dest-intro">
-            <p> France is a country located in western Europe, to the north of Spain and to the west of Italy and Germany.
-                It is known worldwide for its incredible culture, from its famous architecture and works of art to its 
-                sophisticated wines and cuisine.
-            </p>
+
+        <div class="light-section">
+            <div class="country-container">
+
+                <h1 class="heading-country">France</h1>
+
+                <div class="parchment-card country-intro">
+                    <p>France is a country located in western Europe, to the north of Spain and to the west of Italy and Germany.
+                    It is known worldwide for its incredible culture, from its famous architecture and works of art to its
+                    sophisticated wines and cuisine.</p>
+                </div>
+
+                <!-- To add a new year: copy this whole block and update the year -->
+                <div class="year-group">
+                    <h3 class="year-heading">2024</h3>
+                    <div class="destination-list">
+                        <!-- To add a city: copy this line, update href and label -->
+                        <a href="/MyTravels/france-albi.html">Albi</a>
+                        <a href="/MyTravels/france-carcassonne.html">Carcassonne</a>
+                        <a href="/MyTravels/france-montpellier.html">Montpellier</a>
+                    </div>
+                </div>
+
+            </div>
         </div>
-     </div>
-      <div class="destination">
-        <div class="destination-list">
-            <a href="/MyTravels/france-albi.html"><div>Albi</div></a>
-            <a href="/MyTravels/france-carcassonne.html"><div>Carcassonne</div></a>
-            <a href="/MyTravels/france-montpellier.html"><div>Montpellier</div></a>
-        </div>
-      </div>
     </main>
 
     <footer><div class="footer"></div></footer>
 
+    <script>
+    window.addEventListener('load', function () {
+        const field   = document.getElementById('star-field');
+        const section = document.querySelector('.dark-section');
+        const sr      = section.getBoundingClientRect();
+
+        for (let i = 0; i < 120; i++) {
+            const s         = document.createElement('div');
+            s.className     = 'star';
+            s.style.left    = (Math.random() * 100) + '%';
+            s.style.top     = (Math.random() * 100) + '%';
+            const size      = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+            s.style.width   = s.style.height = size + 'px';
+            s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+            const r = Math.random();
+            if      (r < 0.07) s.style.background = '#ffeebb';
+            else if (r < 0.14) s.style.background = '#cce0ff';
+            field.appendChild(s);
+        }
+    });
+    </script>
 </body>
 </html>

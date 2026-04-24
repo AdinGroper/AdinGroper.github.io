@@ -2,176 +2,191 @@
 <html lang="en-US">
 
 <head>
-    <title>Adin's Adventure Log | My Travels - Medellin</title>
+    <title>Adin's Adventure Log | Medell&iacute;n, Colombia</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Adin Groper">
 
     <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/theme.css">
     <link rel="icon" href="/Media/airplane-logo.jpg">
+    <script src="/components/nav.js" defer></script>
+
+    <style>
+        .dark-section { padding: 10em 0 0; }
+        .light-section { padding: 3em 2em 5em; }
+        .city-container { max-width: 780px; margin: 0 auto; }
+        .city-header { text-align: center; margin-bottom: 2.5em; }
+        .heading-city { font-size: clamp(2rem, 5.5vw, 4rem); letter-spacing: 0.25em; }
+        .city-intro { padding: 2em 2.5em; margin: 0 auto 2.5em; }
+        @media (min-width: 1024px) { .city-container { max-width: 960px; } }
+    </style>
 </head>
 
 <body>
-    <div class="nav-container">
-        <header>
-            <a href="/index.html" class="logo">
-                <img src="/Media/airplane-logo.jpg" alt="Logo">
-            </a>
+    <site-nav></site-nav>
 
-            <nav>
-                <ul id="nav-left">
-                    <li>EXPLORE</li>
-                    <li>EMBRACE</li>
-                    <li>ENJOY</li>
-                </ul>
-                <ul id="nav-right">
-                    <li><a href="/MyTravels/destinations.html">MY TRAVELS</a></li>
-                    <li><a href="/AboutMe/bio.html">ABOUT ME</a></li>
-                </ul>
-            </nav>
-        </header>
-    </div>
-    
-    <div class="dest-container">
-        <div class="dest-heading">
-            <h1>Medell&iacute;n, Colombia</h1>
+    <main>
+        <div class="dark-section">
+            <div id="star-field"></div>
         </div>
 
-        <div class="dest-intro">
-            <p> Medell&iacute;n is
-            </p>
-        </div>
-        <div class="dest-text">
-            <h3>June 2025</h3>
-        </div>
-        <div class="dest-text">
-            <p> Hot off a JetBlue flight deal, my dad and I ventured south to see what the vibrant city of Medell&iacute;n had to offer.
-                Situated within the Andes mountain range, the city of Medell&iacute;n is built along the Aburr&aacute; Valley and stretches
-                up and down the steep valley walls on either side. This made the descent into Jose Maria Cordova International
-                Airport a bit too bumpy for my liking. It didn't help that once we landed, the line through immigration and customs
-                took over 2 hours to get through. Luckily, this was the worst of it.
-            </p>
-            <p> Upon exiting the airport, I was greeted with "De d&oacute;nde viene?" ("Where are you from?" in English). After not
-                practicing my Spanish for the better part of 4 years, I was quite proud I still understood, and my dad was certainly 
-                impressed when I responded with "los Estados Unidos" (the United States). We eventually made our way to a taxi and
-                enjoyed the 45 minute ride down into the city that followed. We passed through the T&uacute;nel del Oriente, a 5-mile
-                long tunnel that connects the airport to the city of Medellin, then snaked our way down a few switchbacks before
-                entering the neighborhood of El Poblado and arriving at our hotel.
-            </p>
-            <p> None of the workers at the hotel spoke any English, mostly relying on translation apps to communicate to us. But I
-                was too prideful to rely solely on a translator, instead taking this as an opportunity to dig deep and practice what
-                little Spanish I could remember. I won't say it was perfect - not by any means close - but I will say I was quite
-                impressed with how much did come back to me by the end of the trip.
-            </p>
-            <p> Anyway, after settling into our hotel room and admiring the views, we decided to venture out for some dinner. We
-                didn't go very far, just found a modern looking bar/restaurant a couple blocks away and ordered a light dinner. It
-                certainly was not a very Colombian dinner, but it got the job done. After eating, we just called it an early night,
-                watched a movie back at the hotel room, and prepped for an early morning.
-            </p>
-            <p> I woke up the next morning around 8am to what I thought was my dad shaking the bed to wake me up. Turns out, the
-                whole building was just shaking due to an earthquake! Fortunately for us it happened near Bogot&aacute;, Colombia's capital
-                city, but the fact we could still feel it all the way in Medellin was surreal.
-            </p>
-            <p> Our first full day in the city was actually a Sunday, so when we went out after a quick breakfast at the hotel, we
-                were surprised to see so many people out and about. One of the major roads had been closed off and hundreds of people 
-                were walking, running, and biking for what must've gone on for miles. It was really cool to see. And of course we
-                joined in for a little while to walk around and take in the fresh air with everyone else.
-            </p>
-            <p> We ended up walking quite a ways, all the way down to the R&iacute;o Medell&iacute;n. The river itself wasn't anything
-                to call home about, but we did get some sick views of the city from a bridge that crossed over the river. We still had some
-                time to kill before a tour scheduled for later that afternoon. So we just wandered around the area a bit more, walking along
-                highways and popping into a mall that had a suspiciously large number of phone repair shops inside. Eventually we had
-                enough and just ordered an Uber to the popular Comuna 13 neighborhood.
-            </p>
-            <p> With still an hour left before our tour started, my dad and I decided to explore some of Comuna 13 ourselves in the 
-                meantime. Like much of the city, the entire neighborhood is built onto the side of a hill. So while the streets
-                start out flat at the bottom, you start to climb in elevation pretty quickly. This made for some more amazing views
-                of the city from the "miradores" (viewpoints) closer to the top. 
-            </p>
-            <p> We stopped at one place with a small bar that offered a great lookout spot over Comuna 13 and beyond. I ordered myself 
-                bottle of a local beer called Pilsen. We spent around a half hour there, enjoying some music and the views, before
-                heading back down to find our tour guide.
-            </p>
-            <p> The tour itself was pretty cool. Our tour guide spent some time in the beginning sharing history about Comuna 13 and
-                what it was like for him growing up in the area. He told us that Comuna 13 used to be ridden with gangs and cartels
-                in the 1980s and 90s, and consequently was a very dangerous area to grow up in. He shared how, as a child, he was
-                forced to transport drugs on his bicycle between cartel members, and was once even shot in the back a few times!
-                Comuna 13 has transformed into a much safer place nowadays, with vibrant murals and graffiti covering the walls as
-                symbols of reclamation and resilience.
-            </p>
-            <p> After our tour guide's story had concluded, we followed him down the narrow side streets of the neighborhood and stopped
-                at a few small vendors for some local foods. We tried Colombian church empanadas and sausage, patacones con hogao (which was
-                essentially a fried plaintain, similar to tostones, with a tomato-onion sauce on top), and salted mango ice cream (which
-                was more like a popsicle).
-            </p>
-            <p> The tour took us down a few more narrow alleys, up and down large sets of stairs, and past the homes of many who currently
-                live in the Comuna 13 neighborhood. It was kinda crazy being able to just look into someone's living room or bedroom
-                from out in the open. But the way the houses are built along the hillside, there really isn't much room for privacy.
-            </p>
-            <p> My dad and I ended the night back in El Poblado, near the hotel, and enjoyed a solid meal at a restaurant called Mombasa.
-                The food was tasty; we shared a braised morrillo beef dish and a piece of salmon, and had a chocolate brownie with ice cream
-                for dessert. The restaurant definitely had an upscale vibe to it, offering a very chic atmosphere and dining experience.
-            </p>
-            <p> The next day, now a Monday, we started with a trip to the Botero Plaza. Fernando Botero was Colombian painter and sculptor 
-                best known for his works featuring exaggeratedly large people and figures. There were dozens of his sculptures spread out
-                throughout the plaza, and a large art museum (Museo de Antioquia) that housed a collection of his paintings and those of 
-                numerous other artists from around the world. 
-            </p>
-            <p> Aside from the Botero pieces, which you could not miss if you tried, I really appreciated one in particular about the 
-                American presence in Vietnam in the 1970s. I thought the way the artist conveyed their message across the three panels
-                was very clever and unique.
-            </p>
-            <p> At one point in the museum, one of the curators started talking to me in Spanish. I surprisingly held my own. Although
-                it was fairly basic conversation, and it wasn't at all perfect, I was definitely proud of myself given how long it has
-                been since I've practiced. I just wish I had challenged myself to practice speaking more when I was taking Spanish classes
-                in school every day.
-            </p>
-            <p> Following our museum visit, I decided I wanted to embark on new mission: riding public transportation. Well, really I
-                just wanted to ride the cable car up the hillside to a nature preserve called Parque Arv&iacute;. But doing so required
-                navigating the public transportation around the city. We entered at the nearest train station to the museum, but already
-                I had no idea how to get tickets for the metro. Fortunately, a local saw we were having some trouble and was able to
-                communicate to me where to go to purchase a travel card. I had a little less luck understanding the worker at the ticket
-                booth, and I think he also misunderstood what I was trying to ask for. But alas, he loaded up a card with some cash
-                and we were soon aboard the Medellin metro.
-            </p>
-            <p> What's cool about the metro system there is that, because the city is so hilly, cable cars serve as an extension to the
-                normal train routes. To get to the park, we transferred onto the cable car at Estaci&oacute;n Metro Andaluc&iacute;a. From
-                there, it took about 15-20 minutes to reach the entrance to Parque Arv&iacute;, but the views along the way made the journey
-                worth it. As we climbed higher and higher, we could see out over the whole city, the buildings stretching on and on throughout
-                the valley.
-            </p>
-            <p> We eventually stopped climbing up and started to travel more horizontally, passing through a lush green forest before arriving
-                at the entrance to the park. Once we got up there, there wasn't actually a whole lot to do (for free). Most of the actual
-                trails within the park required us to pay for a tour. There was, however, a small pavilion area open to the public with some 
-                food stands nearby. Since we were both getting hungry for lunch, I ordered us hamburgers in Spanish and we ate under the
-                pavilion. With nothing left to do after that, we just ordered an Uber and made our way back down the mountain. Apparently 
-                we passed through some small towns along way, but as is typical, I was asleep for most of the ride.
-            </p>
-            <p> The rest of the evening was pretty uneventful - just went out for a bite to eat at Pizzaiolo, a pizza place in El Poblado,
-                and shared a pie. Back at the hotel, we spent a while relaxing in the rooftop jacuzzi before soon calling it an early night.
-                We had an early morning the next day, and a long day ahead.
-            </p>
-            <p> The next morning started bright and early. We had to be on the bus that day by 6:45am for our guided tour of one of Colombia's
-                famous attractions: La Piedra de Pe&ntilde;ol. Located in the town of Guatap&eacute;, La Piedra de Pe&ntilde;ol is one of
-                the largest stand-alone rocks in the world. From Medellin, it was about a X hour drive....
+        <div class="light-section">
+            <div class="city-container">
 
-            </p>
+                <div class="city-header">
+                    <a href="/MyTravels/colombia.html" class="breadcrumb">← Colombia</a>
+                    <h1 class="heading-city">Medell&iacute;n</h1>
+                    <p class="heading-date">June 2025</p>
+                </div>
 
-            <p> Medellin was definitely worth the visit, even if the language barrier made travel a bit frustrating at times. I honestly 
-                didn't realize how few people would know how to speak English, even just broken English. I guess there's really no reason
-                for them to learn, as pretty much everyone throughout South and Central America speaks Spanish. It's the same reason why the
-                vast majority of U.S. citizens don't speak anything other than English - there's just no reason for them to learn anything
-                else. And I know nowadays translation apps make things much easier to communicate, but there's something about being able
-                to speak another language on my own that I just find so cool. It's definitely a lifelong goal of mine to become fluent, or
-                at least semi-fluent, in a language other than my native English.
-            </p>
-            
+                <div class="parchment-card city-intro">
+                    <p>Medell&iacute;n is</p>
+                </div>
 
+                <div class="city-body">
+                    <p>Hot off a JetBlue flight deal, my dad and I ventured south to see what the vibrant city of Medell&iacute;n had to offer.
+                    Situated within the Andes mountain range, the city of Medell&iacute;n is built along the Aburr&aacute; Valley and stretches
+                    up and down the steep valley walls on either side. This made the descent into Jose Maria Cordova International
+                    Airport a bit too bumpy for my liking. It didn't help that once we landed, the line through immigration and customs
+                    took over 2 hours to get through. Luckily, this was the worst of it.</p>
+
+                    <p>Upon exiting the airport, I was greeted with "De d&oacute;nde viene?" ("Where are you from?" in English). After not
+                    practicing my Spanish for the better part of 4 years, I was quite proud I still understood, and my dad was certainly
+                    impressed when I responded with "los Estados Unidos" (the United States). We eventually made our way to a taxi and
+                    enjoyed the 45 minute ride down into the city that followed. We passed through the T&uacute;nel del Oriente, a 5-mile
+                    long tunnel that connects the airport to the city of Medellin, then snaked our way down a few switchbacks before
+                    entering the neighborhood of El Poblado and arriving at our hotel.</p>
+
+                    <p>None of the workers at the hotel spoke any English, mostly relying on translation apps to communicate to us. But I
+                    was too prideful to rely solely on a translator, instead taking this as an opportunity to dig deep and practice what
+                    little Spanish I could remember. I won't say it was perfect - not by any means close - but I will say I was quite
+                    impressed with how much did come back to me by the end of the trip.</p>
+
+                    <p>Anyway, after settling into our hotel room and admiring the views, we decided to venture out for some dinner. We
+                    didn't go very far, just found a modern looking bar/restaurant a couple blocks away and ordered a light dinner. It
+                    certainly was not a very Colombian dinner, but it got the job done. After eating, we just called it an early night,
+                    watched a movie back at the hotel room, and prepped for an early morning.</p>
+
+                    <p>I woke up the next morning around 8am to what I thought was my dad shaking the bed to wake me up. Turns out, the
+                    whole building was just shaking due to an earthquake! Fortunately for us it happened near Bogot&aacute;, Colombia's capital
+                    city, but the fact we could still feel it all the way in Medellin was surreal.</p>
+
+                    <p>Our first full day in the city was actually a Sunday, so when we went out after a quick breakfast at the hotel, we
+                    were surprised to see so many people out and about. One of the major roads had been closed off and hundreds of people
+                    were walking, running, and biking for what must've gone on for miles. It was really cool to see. And of course we
+                    joined in for a little while to walk around and take in the fresh air with everyone else.</p>
+
+                    <p>We ended up walking quite a ways, all the way down to the R&iacute;o Medell&iacute;n. The river itself wasn't anything
+                    to call home about, but we did get some sick views of the city from a bridge that crossed over the river. We still had some
+                    time to kill before a tour scheduled for later that afternoon. So we just wandered around the area a bit more, walking along
+                    highways and popping into a mall that had a suspiciously large number of phone repair shops inside. Eventually we had
+                    enough and just ordered an Uber to the popular Comuna 13 neighborhood.</p>
+
+                    <p>With still an hour left before our tour started, my dad and I decided to explore some of Comuna 13 ourselves in the
+                    meantime. Like much of the city, the entire neighborhood is built onto the side of a hill. So while the streets
+                    start out flat at the bottom, you start to climb in elevation pretty quickly. This made for some more amazing views
+                    of the city from the "miradores" (viewpoints) closer to the top.</p>
+
+                    <p>We stopped at one place with a small bar that offered a great lookout spot over Comuna 13 and beyond. I ordered myself
+                    bottle of a local beer called Pilsen. We spent around a half hour there, enjoying some music and the views, before
+                    heading back down to find our tour guide.</p>
+
+                    <p>The tour itself was pretty cool. Our tour guide spent some time in the beginning sharing history about Comuna 13 and
+                    what it was like for him growing up in the area. He told us that Comuna 13 used to be ridden with gangs and cartels
+                    in the 1980s and 90s, and consequently was a very dangerous area to grow up in. He shared how, as a child, he was
+                    forced to transport drugs on his bicycle between cartel members, and was once even shot in the back a few times!
+                    Comuna 13 has transformed into a much safer place nowadays, with vibrant murals and graffiti covering the walls as
+                    symbols of reclamation and resilience.</p>
+
+                    <p>After our tour guide's story had concluded, we followed him down the narrow side streets of the neighborhood and stopped
+                    at a few small vendors for some local foods. We tried Colombian church empanadas and sausage, patacones con hogao (which was
+                    essentially a fried plaintain, similar to tostones, with a tomato-onion sauce on top), and salted mango ice cream (which
+                    was more like a popsicle).</p>
+
+                    <p>The tour took us down a few more narrow alleys, up and down large sets of stairs, and past the homes of many who currently
+                    live in the Comuna 13 neighborhood. It was kinda crazy being able to just look into someone's living room or bedroom
+                    from out in the open. But the way the houses are built along the hillside, there really isn't much room for privacy.</p>
+
+                    <p>My dad and I ended the night back in El Poblado, near the hotel, and enjoyed a solid meal at a restaurant called Mombasa.
+                    The food was tasty; we shared a braised morrillo beef dish and a piece of salmon, and had a chocolate brownie with ice cream
+                    for dessert. The restaurant definitely had an upscale vibe to it, offering a very chic atmosphere and dining experience.</p>
+
+                    <p>The next day, now a Monday, we started with a trip to the Botero Plaza. Fernando Botero was Colombian painter and sculptor
+                    best known for his works featuring exaggeratedly large people and figures. There were dozens of his sculptures spread out
+                    throughout the plaza, and a large art museum (Museo de Antioquia) that housed a collection of his paintings and those of
+                    numerous other artists from around the world.</p>
+
+                    <p>Aside from the Botero pieces, which you could not miss if you tried, I really appreciated one in particular about the
+                    American presence in Vietnam in the 1970s. I thought the way the artist conveyed their message across the three panels
+                    was very clever and unique.</p>
+
+                    <p>At one point in the museum, one of the curators started talking to me in Spanish. I surprisingly held my own. Although
+                    it was fairly basic conversation, and it wasn't at all perfect, I was definitely proud of myself given how long it has
+                    been since I've practiced. I just wish I had challenged myself to practice speaking more when I was taking Spanish classes
+                    in school every day.</p>
+
+                    <p>Following our museum visit, I decided I wanted to embark on new mission: riding public transportation. Well, really I
+                    just wanted to ride the cable car up the hillside to a nature preserve called Parque Arv&iacute;. But doing so required
+                    navigating the public transportation around the city. We entered at the nearest train station to the museum, but already
+                    I had no idea how to get tickets for the metro. Fortunately, a local saw we were having some trouble and was able to
+                    communicate to me where to go to purchase a travel card. I had a little less luck understanding the worker at the ticket
+                    booth, and I think he also misunderstood what I was trying to ask for. But alas, he loaded up a card with some cash
+                    and we were soon aboard the Medellin metro.</p>
+
+                    <p>What's cool about the metro system there is that, because the city is so hilly, cable cars serve as an extension to the
+                    normal train routes. To get to the park, we transferred onto the cable car at Estaci&oacute;n Metro Andaluc&iacute;a. From
+                    there, it took about 15-20 minutes to reach the entrance to Parque Arv&iacute;, but the views along the way made the journey
+                    worth it. As we climbed higher and higher, we could see out over the whole city, the buildings stretching on and on throughout
+                    the valley.</p>
+
+                    <p>We eventually stopped climbing up and started to travel more horizontally, passing through a lush green forest before arriving
+                    at the entrance to the park. Once we got up there, there wasn't actually a whole lot to do (for free). Most of the actual
+                    trails within the park required us to pay for a tour. There was, however, a small pavilion area open to the public with some
+                    food stands nearby. Since we were both getting hungry for lunch, I ordered us hamburgers in Spanish and we ate under the
+                    pavilion. With nothing left to do after that, we just ordered an Uber and made our way back down the mountain. Apparently
+                    we passed through some small towns along way, but as is typical, I was asleep for most of the ride.</p>
+
+                    <p>The rest of the evening was pretty uneventful - just went out for a bite to eat at Pizzaiolo, a pizza place in El Poblado,
+                    and shared a pie. Back at the hotel, we spent a while relaxing in the rooftop jacuzzi before soon calling it an early night.
+                    We had an early morning the next day, and a long day ahead.</p>
+
+                    <p>The next morning started bright and early. We had to be on the bus that day by 6:45am for our guided tour of one of Colombia's
+                    famous attractions: La Piedra de Pe&ntilde;ol. Located in the town of Guatap&eacute;, La Piedra de Pe&ntilde;ol is one of
+                    the largest stand-alone rocks in the world. From Medellin, it was about a X hour drive....</p>
+
+                    <p>Medellin was definitely worth the visit, even if the language barrier made travel a bit frustrating at times. I honestly
+                    didn't realize how few people would know how to speak English, even just broken English. I guess there's really no reason
+                    for them to learn, as pretty much everyone throughout South and Central America speaks Spanish. It's the same reason why the
+                    vast majority of U.S. citizens don't speak anything other than English - there's just no reason for them to learn anything
+                    else. And I know nowadays translation apps make things much easier to communicate, but there's something about being able
+                    to speak another language on my own that I just find so cool. It's definitely a lifelong goal of mine to become fluent, or
+                    at least semi-fluent, in a language other than my native English.</p>
+                </div>
+
+            </div>
         </div>
-        
-    </div>
+    </main>
 
     <footer><div class="footer"></div></footer>
-</body>
 
+    <script>
+    window.addEventListener('load', function () {
+        const field = document.getElementById('star-field');
+        for (let i = 0; i < 120; i++) {
+            const s         = document.createElement('div');
+            s.className     = 'star';
+            s.style.left    = (Math.random() * 100) + '%';
+            s.style.top     = (Math.random() * 100) + '%';
+            const size      = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+            s.style.width   = s.style.height = size + 'px';
+            s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+            const r = Math.random();
+            if      (r < 0.07) s.style.background = '#ffeebb';
+            else if (r < 0.14) s.style.background = '#cce0ff';
+            field.appendChild(s);
+        }
+    });
+    </script>
+</body>
 </html>
