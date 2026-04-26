@@ -115,19 +115,19 @@
             font-weight: 600;
         }
 
-        /* Site title — centered absolutely so it's unaffected by left/right widths */
+        /* Site title — left on mobile, centered absolutely on desktop */
         #nav-title {
-            display: none;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            display: block;
+            position: static;
+            transform: none;
             font-family: 'Oleo Script', Arial;
-            font-size: 1rem;
+            font-size: 0.85rem;
             color: #3d2b1a;
             text-decoration: none;
             white-space: nowrap;
             letter-spacing: 0.03em;
             pointer-events: auto;
+            margin-left: 0.3rem;
         }
         #nav-title:hover {
             color: #3d2b1a !important;
@@ -135,9 +135,16 @@
             opacity: 0.7;
         }
 
-        /* Show tagline on larger phones and up */
-        @media (min-width: 480px) {
+        /* At medium screens, show all 3: tagline appears, title shifts to centered */
+        @media (min-width: 640px) {
             #nav-left { display: flex; }
+            #nav-title {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 1.1rem;
+                margin-left: 0;
+            }
         }
 
         /* Desktop */
@@ -158,7 +165,11 @@
             }
             #nav-title {
                 display: block;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
                 font-size: 1.7rem;
+                margin-left: 0;
             }
         }
     `;

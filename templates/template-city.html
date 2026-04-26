@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+    CITY SUB-PAGE TEMPLATE
+    Use this for individual city pages that live under a country hub page.
+    Example pages using this template: france-albi.html, france-montpellier.html,
+                                       canada-niagarafalls.html, colombia-medellin.html
+
+    SETUP CHECKLIST:
+    1. Replace CITY_NAME with the city name (e.g. "Rome")
+    2. Replace COUNTRY_NAME with the country name (e.g. "Italy")
+    3. Replace COUNTRY_NAME_LOWERCASE with the filename of the country hub (e.g. "italy")
+    4. Replace MONTH YEAR with the visit date (e.g. "June 2025")
+    5. Fill in the intro paragraph (parchment card)
+    6. Add your content blocks — see the CONTENT BLOCKS section below
+    7. Save as MyTravels/[country]-[city].html (e.g. MyTravels/italy-rome.html)
+    8. Add a stamp for this city on the country hub page (e.g. italy.html)
+
+    CONTENT BLOCK TYPES (copy/paste as needed):
+
+    — Full-width photo:
+        <div class="city-photo">
+            <img src="/Media/COUNTRY_NAME/CITY_NAME/filename.jpg" alt="Description">
+        </div>
+
+    — Side-by-side photos (2 or 3 images):
+        <div class="city-combo">
+            <img src="/Media/COUNTRY_NAME/CITY_NAME/filename.jpg" alt="Description">
+            <img src="/Media/COUNTRY_NAME/CITY_NAME/filename.jpg" alt="Description">
+        </div>
+
+    — Photo + text side by side:
+        <div class="city-combo">
+            <img src="/Media/COUNTRY_NAME/CITY_NAME/filename.jpg" alt="Description">
+            <p>Your text here.</p>
+        </div>
+
+    — Text only:
+        <div class="city-body">
+            <p>Your paragraph here.</p>
+            <p>Another paragraph if needed.</p>
+        </div>
+-->
+<html lang="en-US">
+
+<head>
+    <title>Adin's Adventure Log | CITY_NAME, COUNTRY_NAME</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Adin Groper">
+
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="icon" href="/Media/airplane-logo.jpg">
+    <script src="/components/nav.js" defer></script>
+
+    <style>
+        .dark-section { padding: 10em 0 0; }
+        .light-section { padding: 3em 2em 5em; }
+        .city-container { max-width: 780px; margin: 0 auto; }
+        .city-header { text-align: center; margin-bottom: 2.5em; }
+        .heading-city { font-size: clamp(2rem, 5.5vw, 4rem); letter-spacing: 0.25em; }
+        .city-intro { padding: 2em 2.5em; margin: 0 auto 2.5em; }
+        @media (min-width: 1024px) { .city-container { max-width: 960px; } }
+    </style>
+</head>
+
+<body>
+    <site-nav></site-nav>
+
+    <main>
+        <div class="dark-section">
+            <div id="star-field"></div>
+        </div>
+
+        <div class="light-section">
+            <div class="city-container">
+
+                <div class="city-header">
+                    <!-- Link back to the country hub page -->
+                    <a href="/MyTravels/COUNTRY_NAME_LOWERCASE.html" class="breadcrumb">← COUNTRY_NAME</a>
+                    <h1 class="heading-city">CITY_NAME</h1>
+                    <p class="heading-date">MONTH YEAR</p>
+                </div>
+
+                <!-- Intro paragraph: 1-3 sentences about the city -->
+                <div class="parchment-card city-intro">
+                    <p>Write a brief description of the city here. Where is it located? What is it known for?</p>
+                </div>
+
+                <!-- ═══════════════════════════════════════════════════
+                     CONTENT BLOCKS — add your text and photos below.
+                     See the comment at the top of this file for the
+                     available block types and how to use them.
+                     ═══════════════════════════════════════════════════ -->
+
+                <div class="city-body">
+                    <p>Your story begins here...</p>
+                </div>
+
+                <!-- Add more content blocks here -->
+
+                <div class="back-to-top">
+                    <a href="#" class="breadcrumb">↑ Back to Top</a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer><div class="footer"></div></footer>
+
+    <script>
+    window.addEventListener('load', function () {
+        const field = document.getElementById('star-field');
+        for (let i = 0; i < 120; i++) {
+            const s         = document.createElement('div');
+            s.className     = 'star';
+            s.style.left    = (Math.random() * 100) + '%';
+            s.style.top     = (Math.random() * 100) + '%';
+            const size      = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+            s.style.width   = s.style.height = size + 'px';
+            s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+            const r = Math.random();
+            if      (r < 0.07) s.style.background = '#ffeebb';
+            else if (r < 0.14) s.style.background = '#cce0ff';
+            field.appendChild(s);
+        }
+    });
+    </script>
+</body>
+</html>

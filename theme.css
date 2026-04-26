@@ -228,6 +228,15 @@ body { background: #f2f7f4; }
     .city-body p, .city-combo p { font-size: 1.2rem; }
 }
 
+/* ── Back to top ──────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+.back-to-top {
+    text-align: center;
+    margin-top: 3em;
+    padding-top: 1.5em;
+    border-top: 1px solid #c0d4c8;
+}
+
 /* ── Footer ───────────────────────────────────────────────────── */
 footer { background: linear-gradient(to bottom, #2d5a7a, #1e3d58); }
 .footer { margin: 0 !important; padding: 2em !important; }
