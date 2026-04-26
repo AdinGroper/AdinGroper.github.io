@@ -181,7 +181,7 @@
             <div class="nav-container">
                 <header>
                     <a href="/index.html" class="logo">
-                        <img src="/Media/airplane-logo.jpg" alt="Logo">
+                        <img src="/Media/logo.svg" alt="Logo">
                     </a>
                     <a id="nav-title" href="/index.html">Adin's Adventure Log</a>
                     <nav>
