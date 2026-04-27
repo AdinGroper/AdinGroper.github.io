@@ -721,7 +721,13 @@
         // Drag to rotate — also cancels the intro tour if it's still running
         svg.call(d3.drag()
             .on('start', function (event) {
-                if (!inGlobe(event.x, event.y)) { dragActive = false; return; }
+                const src = event.sourceEvent;
+                const clientX = src.touches ? src.touches[0].clientX : src.clientX;
+                const clientY = src.touches ? src.touches[0].clientY : src.clientY;
+                const [sx, sy] = toSVGCoords(clientX, clientY);
+                if (!inGlobe(sx, sy)) { dragActive = false; return; }
+                // Don't start drag when two fingers are down (pinch-to-zoom)
+                if (src.touches && src.touches.length >= 2) { dragActive = false; return; }
                 dragActive        = true;
                 const wasIntro    = isIntro;
                 isIntro           = false;
@@ -770,10 +776,12 @@
         // Touch: track pinch start distance
         svg.node().addEventListener('touchstart', function (event) {
             if (event.touches.length === 2) {
+                event.preventDefault(); // block browser native pinch-to-zoom
                 const t0 = event.touches[0], t1 = event.touches[1];
                 lastPinchDist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+                dragActive = false; // cancel any drag that started from the first finger
             }
-        }, { passive: true });
+        }, { passive: false });
 
         // Touch: pinch-to-zoom + prevent page scroll while dragging globe
         svg.node().addEventListener('touchmove', function (event) {
