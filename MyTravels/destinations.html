@@ -744,21 +744,7 @@
             })
             .on('drag', function (event) {
                 const src = event.sourceEvent;
-                // d3 captures touchmove with stopImmediatePropagation, so pinch must be
-                // handled here — our separate touchmove listener never fires during a drag
-                if (src && src.touches && src.touches.length >= 2) {
-                    if (lastPinchDist !== null && !isIntro) {
-                        const t0 = src.touches[0], t1 = src.touches[1];
-                        const dist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
-                        const factor = dist / lastPinchDist;
-                        lastPinchDist = dist;
-                        const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
-                        projection.scale(newScale);
-                        redraw();
-                        scheduleZoomReset();
-                    }
-                    return;
-                }
+                if (src && src.touches && src.touches.length >= 2) return; // pinch handled by window capture listener
                 if (!dragActive) return;
                 const dragSensitivity = 0.4 / (projection.scale() / radius);
                 rotX += event.dx * dragSensitivity;
@@ -798,9 +784,11 @@
             }
         }, { passive: false });
 
-        // Touch: pinch-to-zoom + prevent page scroll while dragging globe
-        svg.node().addEventListener('touchmove', function (event) {
-            if (event.touches.length === 2 && lastPinchDist !== null) {
+        // Pinch-to-zoom + prevent page scroll while dragging globe.
+        // Must be on window in capture phase — d3 registers its touchmove on document in
+        // capture phase and calls stopImmediatePropagation(), so window capture runs first.
+        window.addEventListener('touchmove', function (event) {
+            if (event.touches.length >= 2 && lastPinchDist !== null) {
                 event.preventDefault();
                 if (!isIntro) {
                     const t0 = event.touches[0], t1 = event.touches[1];
@@ -813,9 +801,9 @@
                     scheduleZoomReset();
                 }
             } else if (dragActive) {
-                event.preventDefault(); // prevent page scroll while single-finger dragging globe
+                event.preventDefault(); // prevent page scroll while single-finger dragging
             }
-        }, { passive: false });
+        }, { capture: true, passive: false });
 
         // Touch: reset pinch tracking on finger lift
         svg.node().addEventListener('touchend', function () {
