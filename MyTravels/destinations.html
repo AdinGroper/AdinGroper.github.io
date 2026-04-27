@@ -810,6 +810,29 @@
             lastPinchDist = null;
         }, { passive: true });
 
+        // iOS Safari: gesturechange fires for pinch independently of d3's touchmove capture
+        let lastGestureScale = 1;
+        svg.node().addEventListener('gesturestart', function (event) {
+            event.preventDefault();
+            lastGestureScale = 1;
+            dragActive = false;
+        }, { passive: false });
+        svg.node().addEventListener('gesturechange', function (event) {
+            event.preventDefault();
+            if (!isIntro) {
+                const factor = event.scale / lastGestureScale;
+                lastGestureScale = event.scale;
+                const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
+                projection.scale(newScale);
+                redraw();
+                scheduleZoomReset();
+            }
+        }, { passive: false });
+        svg.node().addEventListener('gestureend', function (event) {
+            event.preventDefault();
+            lastGestureScale = 1;
+        }, { passive: false });
+
         runIntro();
     });
     </script>
