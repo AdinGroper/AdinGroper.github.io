@@ -1,7 +1,18 @@
 import os
+import sys
 from PIL import Image, ImageOps
 
-media_dir = os.path.join(os.path.dirname(__file__), "Media")
+if len(sys.argv) < 2:
+    print("Usage: python compress_images.py <subfolder>")
+    print("Example: python compress_images.py Colombia/Medellin")
+    sys.exit(1)
+
+media_dir = os.path.join(os.path.dirname(__file__), "Media", sys.argv[1])
+
+if not os.path.isdir(media_dir):
+    print(f"Folder not found: {media_dir}")
+    sys.exit(1)
+
 extensions = {".jpg", ".jpeg"}
 max_width = 1920
 quality = 82
