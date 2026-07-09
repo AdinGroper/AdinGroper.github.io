@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Adin's Adventure Log | United States</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Adin Groper">
+
+    <link rel="stylesheet" href="/main.css">
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="icon" href="/Media/logo.svg?v=2" type="image/svg+xml">
+    <script src="/components/nav.js" defer></script>
+
+    <style>
+        .dark-section { padding: 10em 0 0; }
+        .light-section { padding: 3em 2em 5em; text-align: center; }
+        .country-container { max-width: 720px; margin: 0 auto; }
+        .heading-country {
+            font-size: clamp(2.4rem, 6vw, 4.5rem);
+            letter-spacing: 0.3em;
+            margin: 0 0 1.2em;
+        }
+        .country-intro { padding: 2em 2.5em; margin: 0 auto 3em; text-align: left; }
+        #us-map-wrap {
+            max-width: 900px;
+            margin: 0 auto 1em;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            background: #152738;
+            padding: 24px 36px;
+        }
+        #us-map { display: block; width: 100%; height: auto; }
+        .map-stat {
+            font-family: 'Oswald', Arial, sans-serif;
+            letter-spacing: 0.12em;
+            color: #7a7060;
+            margin-bottom: 3em;
+            font-size: 0.95rem;
+        }
+        #map-tooltip {
+            position: fixed;
+            background: rgba(0,0,0,0.75);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: 'Oswald', Arial;
+            font-size: 0.9rem;
+            pointer-events: none;
+            display: none;
+            z-index: 100;
+        }
+        @media (min-width: 1024px) {
+            .country-container { max-width: 960px; }
+            .destination-list { padding: 0 3em !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <site-nav></site-nav>
+
+    <main>
+        <div class="dark-section">
+            <div id="star-field"></div>
+        </div>
+
+        <div class="light-section">
+            <div class="country-container">
+
+                <a href="/MyTravels/destinations.html" class="breadcrumb">← My Travels</a>
+                <h1 class="heading-country">United States</h1>
+
+                <div class="parchment-card country-intro">
+                    <p>The United States is a country in North America made up of 50 states, spanning from the
+                        Atlantic coast in the east to the Pacific coast in the west, with Alaska in the far northwest
+                        and Hawaii in the central Pacific. It is one of the most geographically and culturally diverse
+                        countries in the world, and home to some of the most iconic cities, landscapes, and landmarks
+                        on the planet.
+                    </p>
+                </div>
+
+                <div id="us-map-wrap">
+                    <svg id="us-map" viewBox="0 0 960 600"></svg>
+                </div>
+                <p class="map-stat">21 of 50 states visited</p>
+
+            </div>
+        </div>
+    </main>
+
+    <footer><div class="footer"></div></footer>
+    <div id="map-tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
+    <script>
+    // Visited state FIPS codes (integers)
+    const visited = new Set([2, 4, 8, 11, 12, 13, 17, 21, 22, 23, 24, 25, 32, 34, 36, 37, 39, 45, 47, 49, 51, 53]);
+
+    const stateNames = {
+        1: 'Alabama', 2: 'Alaska', 4: 'Arizona', 5: 'Arkansas', 6: 'California',
+        8: 'Colorado', 9: 'Connecticut', 10: 'Delaware', 11: 'District of Columbia',
+        12: 'Florida', 13: 'Georgia', 15: 'Hawaii', 16: 'Idaho', 17: 'Illinois',
+        18: 'Indiana', 19: 'Iowa', 20: 'Kansas', 21: 'Kentucky', 22: 'Louisiana',
+        23: 'Maine', 24: 'Maryland', 25: 'Massachusetts', 26: 'Michigan',
+        27: 'Minnesota', 28: 'Mississippi', 29: 'Missouri', 30: 'Montana',
+        31: 'Nebraska', 32: 'Nevada', 33: 'New Hampshire', 34: 'New Jersey',
+        35: 'New Mexico', 36: 'New York', 37: 'North Carolina', 38: 'North Dakota',
+        39: 'Ohio', 40: 'Oklahoma', 41: 'Oregon', 42: 'Pennsylvania',
+        44: 'Rhode Island', 45: 'South Carolina', 46: 'South Dakota', 47: 'Tennessee',
+        48: 'Texas', 49: 'Utah', 50: 'Vermont', 51: 'Virginia', 53: 'Washington',
+        54: 'West Virginia', 55: 'Wisconsin', 56: 'Wyoming'
+    };
+
+    window.addEventListener('load', async function () {
+        const tooltip = document.getElementById('map-tooltip');
+        const svg = d3.select('#us-map');
+
+        const projection = d3.geoAlbersUsa().scale(1300).translate([480, 300]);
+        const path = d3.geoPath().projection(projection);
+
+        const us = await d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json');
+        const states = topojson.feature(us, us.objects.states);
+        const borders = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
+
+        // Ocean background
+        svg.append('rect').attr('width', 960).attr('height', 600).attr('fill', '#152738');
+
+        // Base map: all states visible immediately at unvisited color
+        const statePaths = svg.selectAll('path.state')
+            .data(states.features)
+            .join('path')
+            .attr('class', 'state')
+            .attr('d', path)
+            .attr('fill', '#ddd8cc')
+            .on('mouseover', function (event, d) {
+                const id = +d.id;
+                d3.select(this).attr('fill', visited.has(id) ? '#6fcf58' : '#c8c3b8');
+                const name = stateNames[id];
+                if (name) { tooltip.textContent = name; tooltip.style.display = 'block'; }
+            })
+            .on('mousemove', function (event) {
+                tooltip.style.left = (event.clientX + 14) + 'px';
+                tooltip.style.top  = (event.clientY - 30) + 'px';
+            })
+            .on('mouseout', function (event, d) {
+                const id = +d.id;
+                d3.select(this).attr('fill', visited.has(id) ? '#4a9e3f' : '#ddd8cc');
+                tooltip.style.display = 'none';
+            });
+
+        // Borders visible immediately
+        svg.append('path')
+            .datum(borders)
+            .attr('d', path)
+            .attr('fill', 'none')
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 0.75);
+
+        // Animate only visited states green, left to right
+        const xs = states.features.map(d => path.centroid(d)[0]).filter(x => !isNaN(x) && isFinite(x));
+        const minX = Math.min(...xs), maxX = Math.max(...xs);
+        const spread = 1400, fadeDur = 500;
+
+        statePaths.filter(d => visited.has(+d.id))
+            .transition()
+            .duration(fadeDur)
+            .delay(d => {
+                const x = path.centroid(d)[0];
+                return (isNaN(x) || !isFinite(x)) ? 0 : ((x - minX) / (maxX - minX)) * spread;
+            })
+            .attr('fill', '#4a9e3f');
+    });
+    </script>
+
+    <script>
+    window.addEventListener('load', function () {
+        const field = document.getElementById('star-field');
+        for (let i = 0; i < 120; i++) {
+            const s         = document.createElement('div');
+            s.className     = 'star';
+            s.style.left    = (Math.random() * 100) + '%';
+            s.style.top     = (Math.random() * 100) + '%';
+            const size      = Math.random() < 0.8 ? 1 : (Math.random() < 0.6 ? 2 : 3);
+            s.style.width   = s.style.height = size + 'px';
+            s.style.opacity = (0.2 + Math.random() * 0.75).toFixed(2);
+            const r = Math.random();
+            if      (r < 0.07) s.style.background = '#ffeebb';
+            else if (r < 0.14) s.style.background = '#cce0ff';
+            field.appendChild(s);
+        }
+    });
+    </script>
+</body>
+</html>
