@@ -95,6 +95,7 @@
             <div class="continent-group">
                 <h3 class="continent-heading">South America</h3>
                 <div class="destination-list">
+                    <a href="/MyTravels/argentina.html">Argentina</a>
                     <a href="/MyTravels/colombia.html">Colombia</a>
                 </div>
             </div>
@@ -177,7 +178,9 @@
             136,  // Cayman Islands
             630,  // Puerto Rico
             // South America
+            32,   // Argentina
             170,  // Colombia
+            604,  // Peru
             // Europe
             724,  // Spain
             620,  // Portugal
@@ -272,19 +275,23 @@
 
         // Mutable globe state
         let rotX = 0;
-        let rotY = -20;
+        let rotY = -10; // default tilt
         let isIntro         = true;   // true while the region tour is running
         let isDragging      = false;
         let spinPausedUntil = 0;      // timestamp — spin waits until this passes
         let prevElapsed     = 0;
         let introActive               = true;     // globe starts fully dark; cleared when tour ends
         let globallyRevealedCountries = new Set(); // accumulates across all regions, never resets
-        let currentRegionName         = null;
         let zoomResetTimeout          = null;
         let zoomAnimCancelled         = false;
         let dragActive                = false;
         let hoveredCountryId          = null;
         let lastPinchDist             = null;
+
+        // Touch/coarse-pointer devices (phones, tablets) don't get drag/pinch/tap
+        // interaction — it fights with normal page scrolling more than it helps there.
+        // The globe still displays and auto-rotates normally, just isn't interactive.
+        const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
         const inGlobe = (x, y) => (x - cx) ** 2 + (y - cy) ** 2 <= radius * radius;
 
@@ -297,11 +304,10 @@
             ];
         }
 
-        // Region tour — countries listed in rough left-to-right, top-to-bottom reveal order
+        // Reveal groups — countries lit up in this order during the intro, roughly geographic
         const regions = [
             {
                 name: 'North America',
-                rotX: 100.6,  rotY: -44.4,  zoom: 1.2,
                 countries: new Set([
                     124,  // Canada           (far north)
                     484,  // Mexico            (southwest)
@@ -317,12 +323,14 @@
             },
             {
                 name: 'South America',
-                rotX: 65.9,   rotY:  20.1,  zoom: 1.2,
-                countries: new Set([170]) // Colombia
+                countries: new Set([
+                    170,  // Colombia
+                    32,   // Argentina
+                    604,  // Peru
+                ])
             },
             {
                 name: 'Europe',
-                rotX: -12.1,  rotY: -53.3,  zoom: 1.5,
                 countries: new Set([
                     372,  // Ireland     (far west, north)
                     620,  // Portugal    (far west, south)
@@ -342,12 +350,10 @@
             },
             {
                 name: 'Africa',
-                rotX: -18,    rotY:  -1.6,  zoom: 1.2,
                 countries: new Set([504]) // Morocco
             },
             {
                 name: 'Asia',
-                rotX: -83.8,  rotY: -33.3,  zoom: 1.2,
                 countries: new Set([
                     376,  // Israel    (westernmost)
                     156,  // China
@@ -357,7 +363,6 @@
             },
             {
                 name: 'Oceania',
-                rotX: -134.3, rotY:  25.7,  zoom: 1.3,
                 countries: new Set() // no visited countries yet
             }
         ];
@@ -434,6 +439,7 @@
                 tooltip.style.display = 'none';
             })
             .on('touchstart', function (event, d) {
+                if (isMobile) return;
                 const id   = +d.id;
                 const name = countryNames[id];
                 if (!name) return;
@@ -519,6 +525,7 @@
                 tooltip.style.display = 'none';
             })
             .on('touchstart', function (event, d) {
+                if (isMobile) return;
                 const touch = event.touches[0];
                 tooltip.textContent = d.name;
                 tooltip.style.left  = (touch.clientX + 14) + 'px';
@@ -536,33 +543,19 @@
 
                 // During intro: hide until revealed; after intro: visited only
                 const show = introActive ? revealed : isVisited;
-                // Pulse slightly brighter while its region is the active one
-                const lit  = revealed && d.region === currentRegionName;
 
                 if (pos && visible && show) {
                     d3.select(this)
                         .attr('cx', pos[0])
                         .attr('cy', pos[1])
-                        .attr('r',    lit ? 7 : 5)
-                        .attr('fill', lit ? '#c8ff90' : (isVisited ? '#6fcf58' : '#4a7a4a'))
+                        .attr('r', 5)
+                        .attr('fill', isVisited ? '#6fcf58' : '#4a7a4a')
                         .style('display', null);
                 } else {
                     d3.select(this).style('display', 'none');
                 }
             });
         }
-
-        // Region name label shown during the intro tour
-        const regionLabel = svg.append('text')
-            .attr('x', cx)
-            .attr('y', cy + radius - 18)
-            .attr('text-anchor', 'middle')
-            .attr('fill', 'rgba(255,255,255,0.9)')
-            .attr('font-family', 'Oswald, Arial')
-            .attr('font-size', '1.1rem')
-            .attr('letter-spacing', '0.2em')
-            .style('pointer-events', 'none')
-            .style('display', 'none');
 
         // Globe outline ring
         svg.append('circle')
@@ -581,46 +574,101 @@
             updateDots();
         }
 
-        // Smoothly animate rotation and scale, returns a Promise.
-        // Resolves early (cancelled) if isIntro becomes false mid-flight.
-        function animateTo(targetRotX, targetRotY, targetScale, duration) {
-            return new Promise(resolve => {
-                const startRotX  = rotX;
-                const startRotY  = rotY;
-                const startScale = projection.scale();
-                // Always take the shorter arc around the globe
-                const dX = ((targetRotX - startRotX) % 360 + 540) % 360 - 180;
-                const dY = targetRotY - startRotY;
-                const t0 = performance.now();
 
-                function tick() {
-                    if (!isIntro) { resolve(); return; } // cancelled by user drag
-                    const t = Math.min((performance.now() - t0) / duration, 1);
-                    const e = d3.easeCubicInOut(t);
-                    rotX = startRotX + dX * e;
-                    rotY = startRotY + dY * e;
-                    projection.rotate([rotX, rotY]).scale(startScale + (targetScale - startScale) * e);
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        // Intro reveal tuning:
+        const INTRO_SPEED            = 0.0275; // degrees/ms — constant spin speed for the whole intro.
+        // The densest cluster (currently Europe+Africa, 15 countries) takes ~2.1s of
+        // fixed COUNTRY_STEP_MS pacing to fully reveal, no matter the rotation speed.
+        // At this INTRO_SPEED that burns ~58° of rotation while it plays out (~90° is
+        // roughly the edge of what's still visible) — comfortable for now, but adding
+        // several more countries to a tight region eats into that margin, so slow this
+        // down further (or reduce COUNTRY_STEP_MS) if that happens.
+        const REVEAL_LEAD_DEG = 45;   // when entering a new region, wait until its first country is within this many degrees of center (~90° is the edge of visibility)
+        const COUNTRY_STEP_MS = 150;  // constant pacing between every reveal, regardless of region
+        const REGION_PAUSE_MS = 200;  // brief pause once every country has revealed, before handing off
+        const INTRO_LEAD_IN_DEG = 65; // start this many degrees east of the first country — must exceed REVEAL_LEAD_DEG, otherwise it's already "close enough" and reveals instantly anyway
+
+        const featureById = new Map(countries.features.map(f => [+f.id, f]));
+        function countryLon(id) {
+            const feature = featureById.get(id);
+            if (feature) return d3.geoCentroid(feature)[0];
+            const dot = smallDots.find(d => d.id === id);
+            return dot ? dot.coords[0] : 0;
+        }
+
+        // Hand-ordered reveal path — a route through each region, not just a longitude
+        // sort, so it doesn't zigzag (Malta landing between Austria/Czechia; Andorra
+        // before France) or backtrack (Americas sweep south to north, entering fresh
+        // rather than continuing off wherever Europe ended). Update this list if a new
+        // country gets added to a region.
+        const ORDERED_IDS = [
+            392, 156, 702, 376,                                          // Asia: Japan, China, Singapore, Israel
+            348, 40, 203, 276, 442, 756, 380, 336, 470,                  // Europe: Hungary -> Austria -> Czechia -> Germany -> Luxembourg -> Switzerland -> Italy -> Vatican City -> Malta
+            250, 20, 724, 620, 504, 372,                                 // Europe/Africa: France -> Andorra -> Spain -> Portugal -> Morocco -> Ireland
+            32, 604, 170,                                                // South America: Argentina -> Peru -> Colombia
+            591, 340, 84, 136, 214, 92, 850, 44, 484, 124,               // North America: Panama -> Honduras -> Belize -> Cayman Is. -> Dominican Rep. -> British Virgin Is. -> US Virgin Is. -> Bahamas -> Mexico -> Canada
+        ];
+
+        const allEntries = ORDERED_IDS.map(id => ({
+            id,
+            region: regions.find(r => r.countries.has(id)).name,
+            lon: countryLon(id),
+        }));
+
+        let currentSpinSpeed = INTRO_SPEED; // eased down to the ambient SPEED once the sweep ends
+
+        function revealEntry(entry) {
+            globallyRevealedCountries.add(entry.id);
+            revealingIds.add(entry.id);
+            // Fade the country in rather than snapping it
+            mapGroup.selectAll('path.country')
+                .filter(d => +d.id === entry.id)
+                .transition().duration(400).ease(d3.easeCubicOut)
+                .attr('fill', '#90ee60')
+                .on('end', () => revealingIds.delete(entry.id));
+            updateDots();
+        }
+
+        // The one rotation timer for the whole intro, start to finish — speed changes
+        // smoothly via currentSpinSpeed, but the timer itself never stops or restarts
+        function startIntroSpin() {
+            let prevIntroElapsed = 0;
+            const timer = d3.timer(function (elapsed) {
+                if (!isIntro) { timer.stop(); return; }
+                const dt = elapsed - prevIntroElapsed;
+                prevIntroElapsed = elapsed;
+                if (!isDragging) {
+                    rotX += dt * currentSpinSpeed;
+                    projection.rotate([rotX, rotY]);
                     redraw();
-                    if (t < 1) {
-                        requestAnimationFrame(tick);
-                    } else {
-                        rotX = startRotX + dX;
-                        rotY = targetRotY;
-                        resolve();
-                    }
+                }
+            });
+        }
+
+        // Eases the spin speed down from the fast intro rate to the slow ambient rate,
+        // so the handoff to the auto-rotation timer below has no jolt
+        function decelerateSpin(duration) {
+            return new Promise(resolve => {
+                const startSpeed = currentSpinSpeed;
+                const t0 = performance.now();
+                function tick() {
+                    const t = Math.min((performance.now() - t0) / duration, 1);
+                    currentSpinSpeed = startSpeed + (SPEED - startSpeed) * d3.easeCubicOut(t);
+                    if (t < 1) requestAnimationFrame(tick);
+                    else { currentSpinSpeed = SPEED; resolve(); }
                 }
                 requestAnimationFrame(tick);
             });
         }
-
-        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
         // Smoothly animate back to the default scale after the user stops scrolling
         function startZoomReset() {
             zoomAnimCancelled = false;
             const startScale = projection.scale();
             const startRotY  = rotY;
-            const targetRotY = -20;
+            const targetRotY = -10;
             if (startScale <= radius && Math.abs(startRotY - targetRotY) < 0.01) return;
             const t0       = performance.now();
             const duration = 800;
@@ -647,62 +695,48 @@
 
         const revealingIds = new Set();
 
-        // Reveals the visited countries in a region one at a time, leaving them lit permanently
-        async function revealRegion(region) {
-            currentRegionName = region.name;
-            regionLabel.text(region.name.toUpperCase()).style('display', null);
-            mapGroup.selectAll('path.country').attr('d', pathGen);
-            mapGroup.select('path.borders').attr('d', pathGen);
-            updateDots();
-
-            for (const id of region.countries) {
-                if (!isIntro) return;
-                globallyRevealedCountries.add(id);
-                revealingIds.add(id);
-
-                // Fade the country in rather than snapping it
-                mapGroup.selectAll('path.country')
-                    .filter(d => +d.id === id)
-                    .transition().duration(400).ease(d3.easeCubicOut)
-                    .attr('fill', '#90ee60')
-                    .on('end', () => revealingIds.delete(id));
-
-                updateDots();
-                await sleep(180);
-            }
-
-            await sleep(700); // pause with all countries lit before moving on
-
-            currentRegionName = null;
-            regionLabel.style('display', 'none');
-            redraw();
-        }
-
-        // Intro region tour
+        // Intro reveal — globe spins continuously at one constant speed. Each country
+        // fades in at the fixed COUNTRY_STEP_MS pace after the last, unless it hasn't
+        // rotated into view yet — in which case it pauses (still spinning) until it
+        // has, so nothing reveals off-screen. For tightly-clustered countries that wait
+        // resolves instantly; it only adds real delay across a genuinely large gap.
         async function runIntro() {
-            for (const region of regions) {
-                await animateTo(region.rotX, region.rotY, radius * region.zoom, 1400);
+            // Start a bit east of the first (easternmost) country, so it visibly spins
+            // into view rather than being already dead-center at the very first frame
+            rotX = -(allEntries[0].lon + INTRO_LEAD_IN_DEG);
+            projection.rotate([rotX, rotY]);
+            redraw();
+
+            startIntroSpin();
+
+            for (const entry of allEntries) {
                 if (!isIntro) break;
-                await revealRegion(region);
+
+                // Wait until this country has actually rotated into view before
+                // revealing it — matters for any large gap (e.g. within Asia, between
+                // the East Asia cluster and Israel), not just region changes. For
+                // tightly-clustered countries this resolves immediately and doesn't
+                // affect the per-country pacing at all.
+                while (isIntro && (-rotX) - entry.lon > REVEAL_LEAD_DEG) {
+                    await sleep(30);
+                }
                 if (!isIntro) break;
+
+                revealEntry(entry);
+                await sleep(COUNTRY_STEP_MS);
             }
 
-            if (isIntro) {
-                // Tour finished naturally — glide back to default view
-                await animateTo(0, -20, radius, 1200);
-            }
+            await sleep(REGION_PAUSE_MS); // brief pause once the sweep finishes, still spinning
+            if (isIntro) await decelerateSpin(1000); // ease down to ambient speed before handoff
 
-            // Clean up any partial state left by a cancelled intro
-            currentRegionName = null;
-            regionLabel.style('display', 'none');
-            projection.scale(radius);
+            // Clean up any partial state left by a cancelled or finished intro
             introActive = false;
             isIntro     = false;
             redraw();
         }
 
         // Auto-rotation timer — paused during intro and briefly after drag/click
-        const SPEED = 0.008;
+        const SPEED = 0.0275; // ambient auto-rotation speed — matches INTRO_SPEED, one full turn every ~13s
         d3.timer(function (elapsed) {
             const dt = elapsed - prevElapsed;
             prevElapsed = elapsed;
@@ -719,120 +753,123 @@
             svg.style('cursor', isDragging ? 'grabbing' : (inGlobe(mx, my) ? 'grab' : 'default'));
         });
 
-        // Drag to rotate — also cancels the intro tour if it's still running
-        svg.call(d3.drag()
-            .on('start', function (event) {
-                const src = event.sourceEvent;
-                const clientX = src.touches ? src.touches[0].clientX : src.clientX;
-                const clientY = src.touches ? src.touches[0].clientY : src.clientY;
-                const [sx, sy] = toSVGCoords(clientX, clientY);
-                if (!inGlobe(sx, sy)) { dragActive = false; return; }
-                // Don't start drag when two fingers are down (pinch-to-zoom)
-                if (src.touches && src.touches.length >= 2) { dragActive = false; return; }
-                dragActive        = true;
-                const wasIntro    = isIntro;
-                isIntro           = false;
-                isDragging        = true;
-                introActive       = false;
-                currentRegionName = null;
-                regionLabel.style('display', 'none');
-                zoomAnimCancelled = true;
-                clearTimeout(zoomResetTimeout);
-                if (wasIntro) projection.scale(radius);
-                tooltip.style.display = 'none';
-                svg.style('cursor', 'grabbing');
+        // Drag/wheel/pinch interaction — skipped entirely on touch/coarse-pointer
+        // devices, so touching the globe there falls through to normal page scroll
+        // instead of fighting it. The globe still displays and auto-rotates as usual.
+        if (!isMobile) {
+            // Drag to rotate — also cancels the intro tour if it's still running
+            svg.call(d3.drag()
+                .on('start', function (event) {
+                    const src = event.sourceEvent;
+                    const clientX = src.touches ? src.touches[0].clientX : src.clientX;
+                    const clientY = src.touches ? src.touches[0].clientY : src.clientY;
+                    const [sx, sy] = toSVGCoords(clientX, clientY);
+                    if (!inGlobe(sx, sy)) { dragActive = false; return; }
+                    // Don't start drag when two fingers are down (pinch-to-zoom)
+                    if (src.touches && src.touches.length >= 2) { dragActive = false; return; }
+                    dragActive        = true;
+                    const wasIntro    = isIntro;
+                    isIntro           = false;
+                    isDragging        = true;
+                    introActive       = false;
+                    zoomAnimCancelled = true;
+                    clearTimeout(zoomResetTimeout);
+                    if (wasIntro) projection.scale(radius);
+                    tooltip.style.display = 'none';
+                    svg.style('cursor', 'grabbing');
+                    redraw();
+                })
+                .on('drag', function (event) {
+                    const src = event.sourceEvent;
+                    if (src && src.touches && src.touches.length >= 2) return; // pinch handled by window capture listener
+                    if (!dragActive) return;
+                    const dragSensitivity = 0.4 / (projection.scale() / radius);
+                    rotX += event.dx * dragSensitivity;
+                    rotY = Math.max(-90, Math.min(90, rotY - event.dy * dragSensitivity));
+                    projection.rotate([rotX, rotY]);
+                    redraw();
+                })
+                .on('end', function () {
+                    dragActive      = false;
+                    isDragging      = false;
+                    spinPausedUntil = performance.now() + 3000;
+                    scheduleZoomReset();
+                    svg.style('cursor', 'grab');
+                })
+            );
+
+            // Mouse-wheel zoom — disabled during intro tour
+            svg.node().addEventListener('wheel', function (event) {
+                const [lx, ly] = toSVGCoords(event.clientX, event.clientY);
+                if (!inGlobe(lx, ly)) return;
+                event.preventDefault();
+                if (isIntro) return;
+                const factor = event.deltaY < 0 ? 1.06 : 1 / 1.06;
+                const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
+                projection.scale(newScale);
                 redraw();
-            })
-            .on('drag', function (event) {
-                const src = event.sourceEvent;
-                if (src && src.touches && src.touches.length >= 2) return; // pinch handled by window capture listener
-                if (!dragActive) return;
-                const dragSensitivity = 0.4 / (projection.scale() / radius);
-                rotX += event.dx * dragSensitivity;
-                rotY = Math.max(-90, Math.min(90, rotY - event.dy * dragSensitivity));
-                projection.rotate([rotX, rotY]);
-                redraw();
-            })
-            .on('end', function () {
-                dragActive      = false;
-                isDragging      = false;
-                spinPausedUntil = performance.now() + 3000;
-                scheduleZoomReset();
-                svg.style('cursor', 'grab');
-            })
-        );
+                scheduleZoomReset(); // zoom resets 3 seconds after last scroll
+            }, { passive: false });
 
-        // Mouse-wheel zoom — disabled during intro tour
-        svg.node().addEventListener('wheel', function (event) {
-            const [lx, ly] = toSVGCoords(event.clientX, event.clientY);
-            if (!inGlobe(lx, ly)) return;
-            event.preventDefault();
-            if (isIntro) return;
-            const factor = event.deltaY < 0 ? 1.06 : 1 / 1.06;
-            const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
-            projection.scale(newScale);
-            redraw();
-            scheduleZoomReset(); // zoom resets 3 seconds after last scroll
-        }, { passive: false });
+            // Touch: track pinch start distance
+            svg.node().addEventListener('touchstart', function (event) {
+                if (event.touches.length === 2) {
+                    event.preventDefault(); // block browser native pinch-to-zoom
+                    const t0 = event.touches[0], t1 = event.touches[1];
+                    lastPinchDist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+                    dragActive = false; // cancel any drag that started from the first finger
+                }
+            }, { passive: false });
 
-        // Touch: track pinch start distance
-        svg.node().addEventListener('touchstart', function (event) {
-            if (event.touches.length === 2) {
-                event.preventDefault(); // block browser native pinch-to-zoom
-                const t0 = event.touches[0], t1 = event.touches[1];
-                lastPinchDist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
-                dragActive = false; // cancel any drag that started from the first finger
-            }
-        }, { passive: false });
+            // Pinch-to-zoom + prevent page scroll while dragging globe.
+            // Must be on window in capture phase — d3 registers its touchmove on document in
+            // capture phase and calls stopImmediatePropagation(), so window capture runs first.
+            window.addEventListener('touchmove', function (event) {
+                if (event.touches.length >= 2 && lastPinchDist !== null) {
+                    event.preventDefault();
+                    if (!isIntro) {
+                        const t0 = event.touches[0], t1 = event.touches[1];
+                        const dist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
+                        const factor = dist / lastPinchDist;
+                        lastPinchDist = dist;
+                        const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
+                        projection.scale(newScale);
+                        redraw();
+                        scheduleZoomReset();
+                    }
+                } else if (dragActive) {
+                    event.preventDefault(); // prevent page scroll while single-finger dragging
+                }
+            }, { capture: true, passive: false });
 
-        // Pinch-to-zoom + prevent page scroll while dragging globe.
-        // Must be on window in capture phase — d3 registers its touchmove on document in
-        // capture phase and calls stopImmediatePropagation(), so window capture runs first.
-        window.addEventListener('touchmove', function (event) {
-            if (event.touches.length >= 2 && lastPinchDist !== null) {
+            // Touch: reset pinch tracking on finger lift
+            svg.node().addEventListener('touchend', function () {
+                lastPinchDist = null;
+            }, { passive: true });
+
+            // iOS Safari: gesturechange fires for pinch independently of d3's touchmove capture
+            let lastGestureScale = 1;
+            svg.node().addEventListener('gesturestart', function (event) {
+                event.preventDefault();
+                lastGestureScale = 1;
+                dragActive = false;
+            }, { passive: false });
+            svg.node().addEventListener('gesturechange', function (event) {
                 event.preventDefault();
                 if (!isIntro) {
-                    const t0 = event.touches[0], t1 = event.touches[1];
-                    const dist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
-                    const factor = dist / lastPinchDist;
-                    lastPinchDist = dist;
+                    const factor = event.scale / lastGestureScale;
+                    lastGestureScale = event.scale;
                     const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
                     projection.scale(newScale);
                     redraw();
                     scheduleZoomReset();
                 }
-            } else if (dragActive) {
-                event.preventDefault(); // prevent page scroll while single-finger dragging
-            }
-        }, { capture: true, passive: false });
-
-        // Touch: reset pinch tracking on finger lift
-        svg.node().addEventListener('touchend', function () {
-            lastPinchDist = null;
-        }, { passive: true });
-
-        // iOS Safari: gesturechange fires for pinch independently of d3's touchmove capture
-        let lastGestureScale = 1;
-        svg.node().addEventListener('gesturestart', function (event) {
-            event.preventDefault();
-            lastGestureScale = 1;
-            dragActive = false;
-        }, { passive: false });
-        svg.node().addEventListener('gesturechange', function (event) {
-            event.preventDefault();
-            if (!isIntro) {
-                const factor = event.scale / lastGestureScale;
-                lastGestureScale = event.scale;
-                const newScale = Math.max(radius, Math.min(radius * 4, projection.scale() * factor));
-                projection.scale(newScale);
-                redraw();
-                scheduleZoomReset();
-            }
-        }, { passive: false });
-        svg.node().addEventListener('gestureend', function (event) {
-            event.preventDefault();
-            lastGestureScale = 1;
-        }, { passive: false });
+            }, { passive: false });
+            svg.node().addEventListener('gestureend', function (event) {
+                event.preventDefault();
+                lastGestureScale = 1;
+            }, { passive: false });
+        }
 
         runIntro();
     });
